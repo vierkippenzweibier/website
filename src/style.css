@@ -52,6 +52,11 @@ a:hover { color: var(--accent); }
 .eyebrow { margin: 0 0 10px; }
 .ep-text .eyebrow { display: inline-block; margin: 0 0 18px; padding: 6px 14px 5px; background: var(--accent); color: var(--cream); font-family: var(--display); font-size: 28px; letter-spacing: .03em; line-height: 1.1; text-transform: uppercase; }
 
+/* Kapitel: am Desktop ohne Klappzeile, am Handy aufklappbar */
+.ch-acc > summary { display: none; }
+.ch-h { margin: 0; font-family: var(--mono); font-weight: 700; font-size: 14px; letter-spacing: .18em; text-transform: uppercase; }
+.ch-h span { color: var(--muted); font-weight: 400; }
+
 /* Aufklappbare Folgenliste */
 .acc summary { display: flex; align-items: center; justify-content: space-between; gap: 16px; cursor: pointer; list-style: none; }
 .acc summary::-webkit-details-marker { display: none; }
@@ -133,7 +138,12 @@ a:hover { color: var(--accent); }
   .hero { padding-top: 24px; }
   .listen { margin-bottom: 24px; }
   .section { margin-top: 56px; padding-top: 24px; }
-  .chapters { margin-top: 16px; columns: 1; }
+  .chapters { margin-top: 8px; columns: 1; }
+  .ch-acc { margin-top: 16px; border-bottom: 1px solid #cfc6aa; }
+  .ch-acc > summary { display: flex; padding: 12px 0; }
+  .ch-acc .acc-i { flex-basis: 20px; width: 20px; height: 20px; }
+  .ch-acc .acc-i::before, .ch-acc .acc-i::after { top: 9px; left: 2px; right: 2px; }
+  .ch-acc[open] { padding-bottom: 12px; }
   .player { margin-top: 20px; padding: 14px 16px; gap: 14px; }
   .foot { margin-top: 56px; padding-bottom: 32px; }
   .listen { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }

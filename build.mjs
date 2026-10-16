@@ -185,10 +185,12 @@ function home(eps) {
 </div>
 <button class="speed" type="button" aria-label="Wiedergabegeschwindigkeit">1×</button>
 </div>
-<h3 class="sr">Kapitel</h3>
-<ol class="chapters" data-chapters${latest.chapters.length ? '' : ' hidden'}>
+<details class="acc ch-acc" open data-chapters-wrap${latest.chapters.length ? '' : ' hidden'}>
+<summary><h3 class="ch-h">Kapitel <span data-ch-count>${latest.chapters.length}</span></h3><span class="acc-i" aria-hidden="true"></span></summary>
+<ol class="chapters" data-chapters>
 ${chapterItems(latest)}
 </ol>
+</details>
 </div></section>
 
 <section id="folgen" class="wrap"><div class="section">

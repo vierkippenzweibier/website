@@ -20,6 +20,11 @@
   var $ = function (sel) { return document.querySelector(sel); };
   var eyebrowEl = $('[data-eyebrow]'), hookEl = $('[data-hook]'), ledeEl = $('[data-lede]');
   var coverEl = $('[data-cover]'), chaptersEl = $('[data-chapters]');
+  var chWrap = $('[data-chapters-wrap]'), chCount = $('[data-ch-count]');
+  // Am Handy sind die Kapitel zugeklappt, am Desktop immer offen.
+  var mobile = window.matchMedia && window.matchMedia('(max-width: 760px)');
+  if (chWrap && mobile && mobile.matches) chWrap.open = false;
+  if (mobile && mobile.addEventListener) mobile.addEventListener('change', function (m) { if (chWrap && !m.matches) chWrap.open = true; });
 
   function esc(t) { var d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
 
@@ -35,7 +40,8 @@
       chaptersEl.innerHTML = ep.chapters.map(function (c) {
         return '<li><button type="button" data-seek="' + c.start + '"><span class="t">' + c.t + '</span><span class="ct">' + esc(c.title) + '</span></button></li>';
       }).join('');
-      chaptersEl.hidden = !ep.chapters.length;
+      if (chWrap) chWrap.hidden = !ep.chapters.length;
+      if (chCount) chCount.textContent = ep.chapters.length;
     }
     activeCh = -1;
   }
