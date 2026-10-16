@@ -3,7 +3,7 @@ export default {
   domain: 'vierkippenzweibier.de',
   feed: 'https://vierkippenzweibier.podigee.io/feed/mp3',
 
-  claim: 'ein rapper und ein dj an der theke. rap, clubkultur, fußball und karlsruhe. montags aufgenommen in der venus bar.',
+  claim: 'till und fritz reden über rap, clubkultur, fußball und alles dazwischen. aufgenommen montags, wenn die venus bar zu hat.',
   release: 'Jeden Donnerstag eine neue Folge.',
 
   links: {
