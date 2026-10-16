@@ -46,6 +46,16 @@ a:hover { color: var(--accent); }
 /* Abschnitte */
 .section { margin-top: 88px; padding-top: 28px; border-top: var(--line); }
 .eyebrow { margin: 0 0 10px; }
+.ep-text .eyebrow { display: inline-block; margin: 0 0 18px; padding: 6px 14px 5px; background: var(--accent); color: var(--cream); font-family: var(--display); font-size: 28px; letter-spacing: .03em; line-height: 1.1; text-transform: uppercase; }
+
+/* Aufklappbare Folgenliste */
+.acc summary { display: flex; align-items: center; justify-content: space-between; gap: 16px; cursor: pointer; list-style: none; }
+.acc summary::-webkit-details-marker { display: none; }
+.acc summary:hover .h { color: var(--accent); }
+.acc-i { position: relative; flex: 0 0 28px; width: 28px; height: 28px; }
+.acc-i::before, .acc-i::after { content: ''; position: absolute; left: 4px; right: 4px; top: 13px; height: 2px; background: var(--ink); transition: transform .2s; }
+.acc-i::after { transform: rotate(90deg); }
+.acc[open] .acc-i::after { transform: rotate(0deg); }
 .h { margin: 0; font-family: var(--display); font-weight: 400; letter-spacing: .03em; line-height: 1.05; }
 .h-xl { font-size: clamp(34px, 4.6vw, 52px); }
 .h-m { font-size: 28px; }
@@ -117,6 +127,7 @@ a:hover { color: var(--accent); }
   .photo, .claim { flex: none; }
   .claim { margin: -12px 0 0 32px; font-size: 16px; padding: 20px 20px; }
   .ep-head { flex-direction: column-reverse; gap: 20px; }
+  .ep-text .eyebrow { font-size: 22px; }
   .cover { width: 160px; height: 160px; flex-basis: auto; }
   .player { flex-wrap: wrap; }
   .track { flex-basis: calc(100% - 74px); }

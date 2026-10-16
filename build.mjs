@@ -186,7 +186,8 @@ ${chapterItems(latest)}
 </div></section>
 
 <section id="folgen" class="wrap"><div class="section">
-<h2 class="h h-m">LETZTE FOLGEN</h2>
+<details class="acc">
+<summary><h2 class="h h-m">LETZTE FOLGEN</h2><span class="acc-i" aria-hidden="true"></span></summary>
 <ul class="episodes">
 ${list.slice(1).map((e, i) => `<li data-i="${i + 1}">
 <span class="no">#${esc(e.no)}</span>
@@ -195,6 +196,7 @@ ${list.slice(1).map((e, i) => `<li data-i="${i + 1}">
 </li>`).join('\n')}
 </ul>
 <p class="more"><a href="https://vierkippenzweibier.podigee.io/episodes">Alle ${eps.length} Folgen</a></p>
+</details>
 </div></section>
 
 <section id="wir" class="wrap"><div class="section">
