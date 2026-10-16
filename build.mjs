@@ -1,9 +1,13 @@
 // Baut die Seite nach dist/. Folgen kommen aus dem Podigee-Feed.
 // Lokal testen ohne Netz: FEED_FILE=test/sample-feed.xml node build.mjs
 import { readFile, writeFile, mkdir, cp, rm, access } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
 import config from './site.config.mjs';
 
 const OUT = 'dist';
+// Versionsnummer aus dem Dateiinhalt, damit Browser neue CSS/JS sofort laden.
+const ver = async (f) => createHash('sha1').update(await readFile(f)).digest('hex').slice(0, 8);
+const V = { css: await ver('src/style.css'), js: await ver('src/player.js') };
 const exists = (p) => access(p).then(() => true, () => false);
 
 // ---------- Feed lesen ----------
@@ -91,7 +95,7 @@ function layout({ title, description, body, path = '' }) {
 ${hasPhoto ? `<meta property="og:image" content="https://${config.domain}/${config.photo}">` : ''}
 <meta name="theme-color" content="#fcf7e5">
 <link rel="alternate" type="application/rss+xml" title="VIER KIPPEN ZWEI BIER" href="${config.feed}">
-<link rel="stylesheet" href="/style.css">
+<link rel="stylesheet" href="/style.css?v=${V.css}">
 </head>
 <body>
 <header class="head wrap">
@@ -195,7 +199,7 @@ ${config.hosts.map((h) => `<div><div class="h h-m">${esc(h.name)}</div><p>${esc(
 </div></section>
 </main>
 <script type="application/json" id="episodes-data">${JSON.stringify(data).replace(/</g, '\\u003c')}</script>
-<script src="/player.js" defer></script>`,
+<script src="/player.js?v=${V.js}" defer></script>`,
   });
 }
 
