@@ -118,7 +118,6 @@ ${body}
 }
 
 let hasPhoto = false;
-let cover = '';
 const photoSizes = [];
 
 function home(eps) {
@@ -129,13 +128,17 @@ function home(eps) {
     ? `<img src="/${esc(config.photo)}" srcset="${photoSizes.map((s) => `/${esc(s.file)} ${s.w}w`).join(', ')}" sizes="(max-width: 760px) 100vw, 640px" alt="${esc(config.photoAlt)}" width="1280" height="960" fetchpriority="high">`
     : `<div class="ph" role="img" aria-label="${esc(config.photoAlt)}">[ Foto folgt ]</div>`;
 
-  const chapters = latest.chapters.length ? `
-<h3 class="sr">Kapitel</h3>
-<ol class="chapters">
-${latest.chapters.map((c) => `<li><button type="button" data-seek="${c.start}"><span class="t">${clock(c.start)}</span><span class="ct">${esc(c.title)}</span></button></li>`).join('\n')}
-</ol>` : '';
+  const chapterItems = (e) => e.chapters.map((c) => `<li><button type="button" data-seek="${c.start}"><span class="t">${clock(c.start)}</span><span class="ct">${esc(c.title)}</span></button></li>`).join('\n');
+  const eyebrow = (e, i) => `${i === 0 ? 'Neue Folge' : 'Folge'} · #${e.no} · ${date(e.date)}`;
+  const cover = latest.coverFile;
 
-  const data = list.map((e) => ({ audio: e.audio, duration: e.duration, label: `#${e.no} ${e.hook}` }));
+  // Alles, was der Player beim Wechsel der Folge oben anzeigt.
+  const data = list.map((e, i) => ({
+    audio: e.audio, duration: e.duration, label: `#${e.no} ${e.hook}`,
+    eyebrow: eyebrow(e, i), hook: e.hook, subtitle: e.subtitle,
+    cover: e.coverFile ? `/${e.coverFile}` : '', coverAlt: `Cover von Folge #${e.no}`,
+    chapters: e.chapters.map((c) => ({ start: c.start, t: clock(c.start), title: c.title })),
+  }));
 
   return layout({
     title: 'VIER KIPPEN ZWEI BIER – Podcast aus Karlsruhe',
@@ -158,11 +161,11 @@ ${latest.chapters.map((c) => `<li><button type="button" data-seek="${c.start}"><
 <section id="folge" class="wrap"><div class="section">
 <div class="ep-head${cover ? ' has-cover' : ''}">
 <div class="ep-text">
-<p class="eyebrow">Neue Folge · #${esc(latest.no)} · ${date(latest.date)}</p>
-<h2 class="h h-xl">${esc(latest.hook)}</h2>
-${latest.subtitle ? `<p class="lede">${esc(latest.subtitle)}</p>` : ''}
+<p class="eyebrow" data-eyebrow>${esc(eyebrow(latest, 0))}</p>
+<h2 class="h h-xl" data-hook>${esc(latest.hook)}</h2>
+<p class="lede" data-lede${latest.subtitle ? '' : ' hidden'}>${esc(latest.subtitle)}</p>
 </div>
-${cover ? `<img class="cover" src="/${cover}" alt="Cover von Folge #${esc(latest.no)}" width="600" height="600" loading="lazy">` : ''}
+<img class="cover" data-cover src="${cover ? `/${cover}` : ''}" alt="Cover von Folge #${esc(latest.no)}" width="600" height="600" loading="lazy"${cover ? '' : ' hidden'}>
 </div>
 <div class="player" data-player>
 <button class="play" type="button" aria-label="Abspielen">
@@ -176,7 +179,10 @@ ${cover ? `<img class="cover" src="/${cover}" alt="Cover von Folge #${esc(latest
 </div>
 <button class="speed" type="button" aria-label="Wiedergabegeschwindigkeit">1×</button>
 </div>
-${chapters}
+<h3 class="sr">Kapitel</h3>
+<ol class="chapters" data-chapters${latest.chapters.length ? '' : ' hidden'}>
+${chapterItems(latest)}
+</ol>
 </div></section>
 
 <section id="folgen" class="wrap"><div class="section">
@@ -231,19 +237,28 @@ for (const [name, src] of Object.entries(fonts)) {
   else console.warn(`Schrift fehlt (npm install vergessen?): ${src}`);
 }
 
-// Cover der neuesten Folge, sonst das Podcast-Cover. Wird lokal gespeichert.
-const coverUrl = eps[0].image || attr(xml.split(/<item[\s>]/)[0], 'itunes:image', 'href');
-if (coverUrl && !process.env.FEED_FILE) {
+// Cover jeder Folge auf der Startseite (sonst das Podcast-Cover). Wird lokal gespeichert,
+// damit Besucher nichts von Podigee laden, bevor sie auf Play drücken.
+const showCover = attr(xml.split(/<item[\s>]/)[0], 'itunes:image', 'href');
+await mkdir(`${OUT}/covers`, { recursive: true });
+const fetched = new Map();
+for (const e of eps.slice(0, config.episodesOnStart + 1)) {
+  const url = e.image || showCover;
+  if (process.env.COVER_FILE) {
+    e.coverFile = 'covers/test.jpg';
+    if (!fetched.size) { await cp(process.env.COVER_FILE, `${OUT}/${e.coverFile}`); fetched.set(1, 1); }
+    continue;
+  }
+  if (!url || process.env.FEED_FILE) continue;
+  if (fetched.has(url)) { e.coverFile = fetched.get(url); continue; }
   try {
-    const res = await fetch(coverUrl);
+    const res = await fetch(url);
     if (!res.ok) throw new Error(res.status);
-    const ext = /png/.test(res.headers.get('content-type') || coverUrl) ? 'png' : 'jpg';
-    cover = `cover.${ext}`;
-    await writeFile(`${OUT}/${cover}`, Buffer.from(await res.arrayBuffer()));
-  } catch (e) { console.warn('Cover nicht geladen:', e.message); cover = ''; }
-} else if (process.env.COVER_FILE) {
-  cover = 'cover.jpg';
-  await cp(process.env.COVER_FILE, `${OUT}/${cover}`);
+    const ext = /png/.test(res.headers.get('content-type') || url) ? 'png' : 'jpg';
+    const file = `covers/${e.no || fetched.size}.${ext}`;
+    await writeFile(`${OUT}/${file}`, Buffer.from(await res.arrayBuffer()));
+    fetched.set(url, file); e.coverFile = file;
+  } catch (err) { console.warn(`Cover #${e.no} nicht geladen:`, err.message); }
 }
 
 await writeFile(`${OUT}/index.html`, home(eps));
@@ -256,4 +271,4 @@ for (const p of ['impressum', 'datenschutz']) {
 await writeFile(`${OUT}/CNAME`, `${config.domain}\n`);
 await writeFile(`${OUT}/robots.txt`, `User-agent: *\nAllow: /\n`);
 
-console.log(`Fertig: ${eps.length} Folgen, neueste #${eps[0].no} ${eps[0].hook}${hasPhoto ? '' : ' (noch ohne Foto)'}${cover ? ', mit Cover' : ', ohne Cover'}`);
+console.log(`Fertig: ${eps.length} Folgen, neueste #${eps[0].no} ${eps[0].hook}${hasPhoto ? '' : ' (noch ohne Foto)'}, ${eps.filter((e) => e.coverFile).length} Cover`);

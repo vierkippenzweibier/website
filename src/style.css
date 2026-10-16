@@ -76,7 +76,7 @@ a:hover { color: var(--accent); }
 .chapters { margin: 24px 0 0; padding: 0; list-style: none; columns: 2 320px; column-gap: 40px; }
 .chapters li { break-inside: avoid; }
 .chapters button { display: flex; gap: 16px; width: 100%; padding: 6px 0; border: 0; background: none; font: inherit; text-align: left; cursor: pointer; color: var(--ink); }
-.chapters button:hover .ct { color: var(--accent); }
+.chapters button:hover .ct, .chapters .is-active .ct, .chapters .is-active .t { color: var(--accent); }
 .chapters .t { flex: 0 0 76px; font-size: 14px; color: var(--muted); }
 .chapters .ct { font-family: var(--display); letter-spacing: .03em; font-size: 17px; }
 

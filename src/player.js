@@ -14,6 +14,41 @@
   var speedBtn = root.querySelector('.speed');
   var speeds = [1, 1.25, 1.5, 2];
   var current = 0;
+  var activeCh = -1;
+
+  // Kopfbereich (Titel, Text, Cover, Kapitel) auf die gewählte Folge umstellen.
+  var $ = function (sel) { return document.querySelector(sel); };
+  var eyebrowEl = $('[data-eyebrow]'), hookEl = $('[data-hook]'), ledeEl = $('[data-lede]');
+  var coverEl = $('[data-cover]'), chaptersEl = $('[data-chapters]');
+
+  function esc(t) { var d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
+
+  function showEpisode(ep) {
+    if (eyebrowEl) eyebrowEl.textContent = ep.eyebrow;
+    if (hookEl) hookEl.textContent = ep.hook;
+    if (ledeEl) { ledeEl.textContent = ep.subtitle || ''; ledeEl.hidden = !ep.subtitle; }
+    if (coverEl) {
+      if (ep.cover) { coverEl.src = ep.cover; coverEl.alt = ep.coverAlt; coverEl.hidden = false; }
+      else coverEl.hidden = true;
+    }
+    if (chaptersEl) {
+      chaptersEl.innerHTML = ep.chapters.map(function (c) {
+        return '<li><button type="button" data-seek="' + c.start + '"><span class="t">' + c.t + '</span><span class="ct">' + esc(c.title) + '</span></button></li>';
+      }).join('');
+      chaptersEl.hidden = !ep.chapters.length;
+    }
+    activeCh = -1;
+  }
+
+  function markChapter(t) {
+    if (!chaptersEl) return;
+    var chs = data[current].chapters, idx = -1;
+    for (var k = 0; k < chs.length; k++) if (t >= chs[k].start) idx = k;
+    if (idx === activeCh) return;
+    activeCh = idx;
+    var items = chaptersEl.children;
+    for (var j = 0; j < items.length; j++) items[j].classList.toggle('is-active', j === idx);
+  }
 
   function fmt(s) {
     s = Math.max(0, Math.floor(s || 0));
@@ -31,6 +66,7 @@
       dur.textContent = fmt(ep.duration);
       bar.value = 0; bar.style.setProperty('--p', '0%');
       cur.textContent = '0:00';
+      showEpisode(ep);
       document.querySelectorAll('.episodes li').forEach(function (li) {
         li.classList.toggle('is-current', Number(li.dataset.i) === i);
       });
@@ -39,7 +75,7 @@
       var go = function () { audio.currentTime = seek; };
       if (audio.readyState > 0) go(); else audio.addEventListener('loadedmetadata', go, { once: true });
     }
-    if (autoplay) audio.play();
+    if (autoplay) { var pr = audio.play(); if (pr && pr.catch) pr.catch(function () {}); }
   }
 
   playBtn.addEventListener('click', function () {
@@ -54,6 +90,7 @@
     var p = audio.currentTime / d * 100;
     bar.value = p; bar.style.setProperty('--p', p + '%');
     cur.textContent = fmt(audio.currentTime);
+    markChapter(audio.currentTime);
   });
   bar.addEventListener('input', function () {
     if (!audio.src) select(current, false);
@@ -70,10 +107,12 @@
   document.querySelectorAll('[data-play]').forEach(function (b) {
     b.addEventListener('click', function () {
       select(Number(b.dataset.play), true);
-      root.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      document.getElementById('folge').scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
   });
-  document.querySelectorAll('[data-seek]').forEach(function (b) {
-    b.addEventListener('click', function () { select(0, true, Number(b.dataset.seek)); });
+  // Kapitel springen in der Folge, die gerade oben steht.
+  if (chaptersEl) chaptersEl.addEventListener('click', function (ev) {
+    var b = ev.target.closest('[data-seek]');
+    if (b) select(current, true, Number(b.dataset.seek));
   });
 })();
