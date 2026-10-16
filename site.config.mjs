@@ -26,6 +26,34 @@ export default {
     'Neue Folgen erscheinen in der Nacht auf Donnerstag, um Mitternacht, auf Spotify, Apple Podcasts und hier auf der Seite.',
   ],
 
+  // Häufige Fragen ganz unten. Antworten dürfen Links enthalten (<a href="...">...</a>).
+  faq: [
+    {
+      q: 'Was ist VIER KIPPEN ZWEI BIER?',
+      a: 'Ein wöchentlicher Podcast von Till und Fritz. Die beiden reden über Rap, Clubkultur, Fußball und alles, was sie gerade beschäftigt. Aufgenommen wird montags in der Venus Bar in Karlsruhe, wenn die Bar geschlossen hat. Eine Folge dauert ungefähr so lange wie vier Kippen und zwei Bier, meistens gut eine Stunde.',
+    },
+    {
+      q: 'Kann ich den Podcast auch hören, wenn ich nicht aus Karlsruhe komme?',
+      a: 'Klar. Karlsruhe ist der Ort, an dem aufgenommen wird, nicht das Thema. Die meisten Gespräche drehen sich um Musik, Fußball, Nachtleben und das, was online gerade passiert. Ab und zu geht es auch um die Stadt, kennen muss man sie dafür nicht.',
+    },
+    {
+      q: 'Was ist eine 1UP? Und was sind die dreisten Drei?',
+      a: '1UP ist unsere Unpopular Opinion: eine Meinung, mit der man sich eher keine Freunde macht. Der Name ist eine Verbeugung vor der Graffiti- und HipHop-Kultur. Bei den dreisten Drei kommen jede Woche drei steile Thesen auf den Tisch, jede in einem Satz, zum Beispiel „Der Videobeweis hat den Fußball kaputt gemacht“. Danach wird gestritten.',
+    },
+    {
+      q: 'Wann kommen die neuen Folgen?',
+      a: 'Jede Woche in der Nacht von Mittwoch auf Donnerstag, um Mitternacht. Wie lange es bis zur nächsten Folge noch dauert, steht ganz oben auf der Seite.',
+    },
+    {
+      q: 'Wo kann ich die neuen Folgen hören?',
+      a: 'Auf <a href="https://open.spotify.com/show/7zLEk5j2OvZNmY3BaYjprm">Spotify</a>, <a href="https://podcasts.apple.com/de/podcast/id1872063614">Apple Podcasts</a> und in so gut wie jeder anderen Podcast-App, einfach nach VIER KIPPEN ZWEI BIER suchen. Oder direkt hier oben im Player. Ausschnitte gibt es auf <a href="https://www.instagram.com/vierkippenzweibier/">Instagram</a> und <a href="https://www.tiktok.com/@vier.kippen.zwei.bier">TikTok</a>.',
+    },
+    {
+      q: 'Wie kann man die Jungs erreichen?',
+      a: 'Am schnellsten per <a href="https://ig.me/m/vierkippenzweibier">DM auf Instagram</a>. Für alles Längere, Kooperationen oder Presse per Mail an <a href="mailto:vierkippenzweibier@web.de">vierkippenzweibier@web.de</a>. Fragen für die Letzte Runde sammeln wir übrigens in den Instagram-Stories.',
+    },
+  ],
+
   // Kurzprofile unter dem Text. Aktuell aus, weil der Pressetext beide vorstellt.
   // Zum Einschalten die Zeilen wieder in die eckigen Klammern von "hosts" setzen.
   hosts: [],

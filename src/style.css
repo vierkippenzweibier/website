@@ -57,6 +57,16 @@ a:hover { color: var(--accent); }
 .ch-h { margin: 0; font-family: var(--mono); font-weight: 700; font-size: 14px; letter-spacing: .18em; text-transform: uppercase; }
 .ch-h span { color: var(--muted); font-weight: 400; }
 
+/* Häufige Fragen */
+.faq { margin-top: 12px; }
+.faq-item { border-bottom: 1px solid #cfc6aa; }
+.faq-item > summary { padding: 18px 0; }
+.faq-q { margin: 0; font-family: var(--display); font-weight: 400; font-size: 22px; letter-spacing: .03em; line-height: 1.2; }
+.faq-item > summary:hover .faq-q { color: var(--accent); }
+.faq-item .acc-i { flex-basis: 22px; width: 22px; height: 22px; }
+.faq-item .acc-i::before, .faq-item .acc-i::after { top: 10px; left: 2px; right: 2px; }
+.faq-a p { margin: 0 0 20px; max-width: 760px; }
+
 /* Aufklappbare Folgenliste */
 .acc summary { display: flex; align-items: center; justify-content: space-between; gap: 16px; cursor: pointer; list-style: none; }
 .acc summary::-webkit-details-marker { display: none; }
@@ -146,6 +156,8 @@ a:hover { color: var(--accent); }
   .ch-acc[open] { padding-bottom: 12px; }
   .player { margin-top: 20px; padding: 14px 16px; gap: 14px; }
   .foot { margin-top: 56px; padding-bottom: 32px; }
+  .faq-item > summary { padding: 14px 0; }
+  .faq-q { font-size: 18px; }
   .listen { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .btn { min-width: 0; padding: 8px 14px; }
   .btn span { font-size: 17px; white-space: nowrap; }

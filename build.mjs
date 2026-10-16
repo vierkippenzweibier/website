@@ -214,6 +214,20 @@ ${config.hosts.length ? `<div class="hosts">
 ${config.hosts.map((h) => `<div><div class="h h-m">${esc(h.name)}</div><p>${esc(h.text)}</p></div>`).join('\n')}
 </div>` : ''}
 </div></section>
+${(config.faq || []).length ? `
+<section id="faq" class="wrap"><div class="section">
+<h2 class="h h-m">HÄUFIGE FRAGEN</h2>
+<div class="faq">
+${config.faq.map((f) => `<details class="acc faq-item">
+<summary><h3 class="faq-q">${esc(f.q)}</h3><span class="acc-i" aria-hidden="true"></span></summary>
+<div class="faq-a"><p>${f.a}</p></div>
+</details>`).join('\n')}
+</div>
+</div></section>
+<script type="application/ld+json">${JSON.stringify({
+  '@context': 'https://schema.org', '@type': 'FAQPage',
+  mainEntity: config.faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a.replace(/<[^>]+>/g, '') } })),
+}).replace(/</g, '\\u003c')}</script>` : ''}
 </main>
 <script type="application/json" id="episodes-data">${JSON.stringify(data).replace(/</g, '\\u003c')}</script>
 <script src="/player.js?v=${V.js}" defer></script>`,
