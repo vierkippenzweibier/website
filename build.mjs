@@ -7,7 +7,7 @@ import config from './site.config.mjs';
 const OUT = 'dist';
 // Versionsnummer aus dem Dateiinhalt, damit Browser neue CSS/JS sofort laden.
 const ver = async (f) => createHash('sha1').update(await readFile(f)).digest('hex').slice(0, 8);
-const V = { css: await ver('src/style.css'), js: await ver('src/player.js') };
+const V = { css: await ver('src/style.css'), js: await ver('src/player.js'), cd: await ver('src/countdown.js') };
 const exists = (p) => access(p).then(() => true, () => false);
 
 // ---------- Feed lesen ----------
@@ -103,6 +103,7 @@ ${hasPhoto ? `<meta property="og:image" content="https://${config.domain}/${conf
 <link rel="stylesheet" href="/style.css?v=${V.css}">
 </head>
 <body>
+<div class="topbar" role="status"><div class="wrap"><span data-countdown>${esc(config.release)}</span></div></div>
 <header class="head wrap">
 <a class="logo" href="/">VIER KIPPEN ZWEI BIER</a>
 <nav aria-label="Hauptmenü"><ul class="nav">
@@ -117,6 +118,7 @@ ${body}
 <span>${esc(config.footer)}</span>
 <nav aria-label="Rechtliches"><a href="/impressum/">Impressum</a><a href="/datenschutz/">Datenschutz</a></nav>
 </div></footer>
+<script src="/countdown.js?v=${V.cd}" defer></script>
 </body>
 </html>
 `;
@@ -160,7 +162,6 @@ function home(eps) {
 <figure class="photo">${photo}</figure>
 <p class="claim">${esc(config.claim)}</p>
 </div>
-<p class="release">${esc(config.release)}</p>
 </section>
 
 <section id="folge" class="wrap"><div class="section">
@@ -226,6 +227,7 @@ await rm(OUT, { recursive: true, force: true });
 await mkdir(`${OUT}/fonts`, { recursive: true });
 await cp('src/style.css', `${OUT}/style.css`);
 await cp('src/player.js', `${OUT}/player.js`);
+await cp('src/countdown.js', `${OUT}/countdown.js`);
 if (await exists('assets')) await cp('assets', `${OUT}/assets`, { recursive: true });
 hasPhoto = await exists(config.photo);
 // Kleinere Fassungen (venus-800.jpg, venus-1280.jpg) werden genutzt, wenn sie daneben liegen.

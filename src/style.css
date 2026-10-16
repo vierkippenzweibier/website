@@ -23,6 +23,11 @@ a:hover { color: var(--accent); }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
 /* Kopf */
+.topbar { background: var(--accent); color: var(--cream); font-size: 14px; letter-spacing: .04em; text-align: center; }
+.topbar .wrap { padding-top: 10px; padding-bottom: 10px; }
+.topbar a { color: var(--cream); font-weight: 700; }
+.topbar a:hover { color: var(--ink); }
+.topbar .cd { font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .head { padding-top: 48px; text-align: center; }
 .logo { display: inline-block; font-family: var(--display); font-size: clamp(36px, 6vw, 72px); letter-spacing: .04em; line-height: 1; text-decoration: none; }
 .nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 36px; margin: 22px 0 0; padding: 0 0 22px; list-style: none; border-bottom: var(--line); }
@@ -41,7 +46,6 @@ a:hover { color: var(--accent); }
 .photo img, .photo .ph { display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; background: var(--paper); }
 .photo .ph { display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 15px; }
 .claim { flex: 0 0 280px; min-width: 0; margin: -40px 0 0 -96px; position: relative; padding: 24px 22px; background: var(--ink); color: var(--cream); font-size: 17px; line-height: 1.5; letter-spacing: .02em; }
-.release { margin: 18px 0 0; font-size: 14px; }
 
 /* Abschnitte */
 .section { margin-top: 88px; padding-top: 28px; border-top: var(--line); }
@@ -117,16 +121,29 @@ a:hover { color: var(--accent); }
 .page h2 { font-family: var(--display); font-weight: 400; font-size: 24px; letter-spacing: .03em; margin: 32px 0 8px; }
 
 @media (max-width: 760px) {
-  .head { padding-top: 32px; }
-  .nav { gap: 8px 22px; }
+  /* Abstände am Handy: 8er-Raster, Abschnitte 56, innerhalb 16 bis 24 */
+  .wrap { padding: 0 20px; }
+  .topbar { font-size: 12px; }
+  .topbar .wrap { padding-top: 8px; padding-bottom: 8px; }
+  .topbar .cd-line { display: block; }
+  .head { padding-top: 24px; }
+  .logo { font-size: 9vw; }
+  .nav { gap: 6px 16px; margin-top: 16px; padding-bottom: 16px; }
+  .nav a { font-size: 13px; letter-spacing: .12em; }
+  .hero { padding-top: 24px; }
+  .listen { margin-bottom: 24px; }
+  .section { margin-top: 56px; padding-top: 24px; }
+  .chapters { margin-top: 16px; columns: 1; }
+  .player { margin-top: 20px; padding: 14px 16px; gap: 14px; }
+  .foot { margin-top: 56px; padding-bottom: 32px; }
   .listen { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .btn { min-width: 0; padding: 8px 14px; }
   .btn span { font-size: 17px; white-space: nowrap; }
   .stage { flex-direction: column; align-items: stretch; }
   .photo, .claim { flex: none; }
   .claim { margin: -12px 0 0 32px; font-size: 16px; padding: 20px 20px; }
-  .ep-head { flex-direction: column-reverse; gap: 20px; }
-  .ep-text .eyebrow { font-size: 22px; }
+  .ep-head { flex-direction: column-reverse; gap: 16px; }
+  .ep-text .eyebrow { font-size: 18px; margin-bottom: 12px; }
   .cover { width: 160px; height: 160px; flex-basis: auto; }
   .player { flex-wrap: wrap; }
   .track { flex-basis: calc(100% - 74px); }
