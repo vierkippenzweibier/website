@@ -1,0 +1,12 @@
+{
+  "name": "vierkippenzweibier-website",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs"
+  },
+  "dependencies": {
+    "@fontsource/anton": "^5.0.0",
+    "@fontsource/courier-prime": "^5.0.0"
+  }
+}
