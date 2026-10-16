@@ -3,7 +3,7 @@ export default {
   domain: 'vierkippenzweibier.de',
   feed: 'https://vierkippenzweibier.podigee.io/feed/mp3',
 
-  claim: 'till und fritz reden über rap, clubkultur, fußball und alles dazwischen. aufgenommen montags, wenn die venus bar zu hat.',
+  claim: 'till und fritz reden über rap, clubkultur, fußball und alles dazwischen. montags, wenn die venus bar zu hat. so lange, wie vier kippen und zwei bier halten.',
   release: 'Jeden Donnerstag eine neue Folge.',
 
   links: {
