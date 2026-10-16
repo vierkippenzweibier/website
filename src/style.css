@@ -26,12 +26,16 @@ a:hover { color: var(--accent); }
 .head { padding-top: 48px; text-align: center; }
 .logo { display: inline-block; font-family: var(--display); font-size: clamp(36px, 6vw, 72px); letter-spacing: .04em; line-height: 1; text-decoration: none; }
 .nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 36px; margin: 22px 0 0; padding: 0 0 22px; list-style: none; border-bottom: var(--line); }
-.nav a, .listen a, .eyebrow { font-size: 14px; letter-spacing: .18em; text-transform: uppercase; }
+.nav a, .eyebrow { font-size: 14px; letter-spacing: .18em; text-transform: uppercase; }
 .nav a { text-decoration: none; }
 
 /* Hero */
 .hero { padding-top: 56px; }
-.listen { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px 24px; margin: 0 0 22px; padding: 0; list-style: none; }
+.listen { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin: 0 0 32px; padding: 0; list-style: none; }
+.btn { display: flex; flex-direction: column; justify-content: center; min-width: 168px; min-height: 58px; padding: 8px 18px; background: var(--ink); color: var(--cream); text-decoration: none; border: var(--line); transition: background .15s; }
+.btn small { font-size: 11px; letter-spacing: .16em; text-transform: uppercase; line-height: 1.2; }
+.btn span { font-family: var(--display); font-size: 20px; letter-spacing: .04em; line-height: 1.15; }
+.btn:hover { background: var(--accent); border-color: var(--accent); color: var(--cream); }
 .stage { display: flex; align-items: center; }
 .photo { flex: 1 1 0; min-width: 0; margin: 0; }
 .photo img, .photo .ph { display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; background: var(--paper); }
@@ -103,7 +107,9 @@ a:hover { color: var(--accent); }
 @media (max-width: 760px) {
   .head { padding-top: 32px; }
   .nav { gap: 8px 22px; }
-  .listen { justify-content: flex-start; }
+  .listen { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .btn { min-width: 0; padding: 8px 14px; }
+  .btn span { font-size: 17px; white-space: nowrap; }
   .stage { flex-direction: column; align-items: stretch; }
   .photo, .claim { flex: none; }
   .claim { margin: -12px 0 0 32px; font-size: 16px; padding: 20px 20px; }

@@ -139,10 +139,10 @@ ${latest.chapters.map((c) => `<li><button type="button" data-seek="${c.start}"><
     body: `<main>
 <section class="hero wrap" aria-label="Willkommen">
 <ul class="listen" aria-label="Hier hören und folgen">
-<li><a href="${L.spotify}">Spotify</a></li>
-<li><a href="${L.apple}">Apple</a></li>
-<li><a href="${L.instagram}">Instagram</a></li>
-<li><a href="${L.tiktok}">TikTok</a></li>
+<li><a class="btn" href="${L.spotify}"><small>Hören auf</small><span>Spotify</span></a></li>
+<li><a class="btn" href="${L.apple}"><small>Hören auf</small><span>Apple Podcasts</span></a></li>
+<li><a class="btn" href="${L.instagram}"><small>Folgen auf</small><span>Instagram</span></a></li>
+<li><a class="btn" href="${L.tiktok}"><small>Folgen auf</small><span>TikTok</span></a></li>
 </ul>
 <div class="stage">
 <figure class="photo">${photo}</figure>
