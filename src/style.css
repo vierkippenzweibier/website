@@ -36,7 +36,7 @@ a:hover { color: var(--accent); }
 .photo { flex: 1 1 0; min-width: 0; margin: 0; }
 .photo img, .photo .ph { display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; background: var(--paper); }
 .photo .ph { display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 15px; }
-.claim { flex: 0 0 380px; min-width: 0; margin: -40px 0 0 -120px; position: relative; padding: 32px 30px; background: var(--ink); color: var(--cream); font-size: 21px; line-height: 1.5; letter-spacing: .02em; }
+.claim { flex: 0 0 280px; min-width: 0; margin: -40px 0 0 -96px; position: relative; padding: 24px 22px; background: var(--ink); color: var(--cream); font-size: 17px; line-height: 1.5; letter-spacing: .02em; }
 .release { margin: 18px 0 0; font-size: 14px; }
 
 /* Abschnitte */
@@ -103,7 +103,7 @@ a:hover { color: var(--accent); }
   .listen { justify-content: flex-start; }
   .stage { flex-direction: column; align-items: stretch; }
   .photo, .claim { flex: none; }
-  .claim { margin: -12px 0 0 32px; font-size: 18px; padding: 24px 22px; }
+  .claim { margin: -12px 0 0 32px; font-size: 16px; padding: 20px 20px; }
   .player { flex-wrap: wrap; }
   .track { flex-basis: calc(100% - 74px); }
   .speed { margin-left: 74px; }
