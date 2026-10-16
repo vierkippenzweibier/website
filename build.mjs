@@ -62,6 +62,7 @@ function parse(xml) {
       audio: attr(it, 'enclosure', 'url'),
       duration: toSeconds(tag(it, 'itunes:duration')),
       link: tag(it, 'link'),
+      image: attr(it, 'itunes:image', 'href'),
       chapters,
     };
   }).filter((e) => e.audio).sort((a, b) => b.date - a.date);
@@ -113,6 +114,7 @@ ${body}
 }
 
 let hasPhoto = false;
+let cover = '';
 const photoSizes = [];
 
 function home(eps) {
@@ -150,9 +152,14 @@ ${latest.chapters.map((c) => `<li><button type="button" data-seek="${c.start}"><
 </section>
 
 <section id="folge" class="wrap"><div class="section">
+<div class="ep-head${cover ? ' has-cover' : ''}">
+<div class="ep-text">
 <p class="eyebrow">Neue Folge · #${esc(latest.no)} · ${date(latest.date)}</p>
 <h2 class="h h-xl">${esc(latest.hook)}</h2>
 ${latest.subtitle ? `<p class="lede">${esc(latest.subtitle)}</p>` : ''}
+</div>
+${cover ? `<img class="cover" src="/${cover}" alt="Cover von Folge #${esc(latest.no)}" width="600" height="600" loading="lazy">` : ''}
+</div>
 <div class="player" data-player>
 <button class="play" type="button" aria-label="Abspielen">
 <svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4l13 8-13 8z" fill="currentColor"/></svg>
@@ -177,7 +184,7 @@ ${list.slice(1).map((e, i) => `<li data-i="${i + 1}">
 <button class="go" type="button" data-play="${i + 1}">Hören</button>
 </li>`).join('\n')}
 </ul>
-<p class="more"><a href="https://vierkippenzweibier.podigee.io/archive">Alle ${eps.length} Folgen</a></p>
+<p class="more"><a href="https://vierkippenzweibier.podigee.io/episodes">Alle ${eps.length} Folgen</a></p>
 </div></section>
 
 <section id="wir" class="wrap"><div class="section">
@@ -220,6 +227,21 @@ for (const [name, src] of Object.entries(fonts)) {
   else console.warn(`Schrift fehlt (npm install vergessen?): ${src}`);
 }
 
+// Cover der neuesten Folge, sonst das Podcast-Cover. Wird lokal gespeichert.
+const coverUrl = eps[0].image || attr(xml.split(/<item[\s>]/)[0], 'itunes:image', 'href');
+if (coverUrl && !process.env.FEED_FILE) {
+  try {
+    const res = await fetch(coverUrl);
+    if (!res.ok) throw new Error(res.status);
+    const ext = /png/.test(res.headers.get('content-type') || coverUrl) ? 'png' : 'jpg';
+    cover = `cover.${ext}`;
+    await writeFile(`${OUT}/${cover}`, Buffer.from(await res.arrayBuffer()));
+  } catch (e) { console.warn('Cover nicht geladen:', e.message); cover = ''; }
+} else if (process.env.COVER_FILE) {
+  cover = 'cover.jpg';
+  await cp(process.env.COVER_FILE, `${OUT}/${cover}`);
+}
+
 await writeFile(`${OUT}/index.html`, home(eps));
 for (const p of ['impressum', 'datenschutz']) {
   const src = await readFile(`pages/${p}.html`, 'utf8');
@@ -230,4 +252,4 @@ for (const p of ['impressum', 'datenschutz']) {
 await writeFile(`${OUT}/CNAME`, `${config.domain}\n`);
 await writeFile(`${OUT}/robots.txt`, `User-agent: *\nAllow: /\n`);
 
-console.log(`Fertig: ${eps.length} Folgen, neueste #${eps[0].no} ${eps[0].hook}${hasPhoto ? '' : ' (noch ohne Foto)'}`);
+console.log(`Fertig: ${eps.length} Folgen, neueste #${eps[0].no} ${eps[0].hook}${hasPhoto ? '' : ' (noch ohne Foto)'}${cover ? ', mit Cover' : ', ohne Cover'}`);
