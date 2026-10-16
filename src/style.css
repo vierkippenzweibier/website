@@ -92,7 +92,7 @@ a:hover { color: var(--accent); }
 .more { margin: 22px 0 0; font-size: 14px; letter-spacing: .14em; text-transform: uppercase; }
 
 /* Hosts */
-.about { max-width: 680px; margin-top: 20px; }
+.about { margin-top: 20px; }
 .about p { margin: 0 0 16px; }
 .about p:first-child { font-size: 19px; }
 .hosts { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 32px; margin-top: 36px; }
