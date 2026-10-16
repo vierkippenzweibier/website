@@ -6,6 +6,11 @@ export default {
   claim: 'till und fritz reden über rap, clubkultur, fußball und alles dazwischen. montags, wenn die venus bar zu hat. so lange, wie vier kippen und zwei bier halten.',
   release: 'Jeden Donnerstag eine neue Folge.',
 
+  // Was Google und Link-Vorschauen (WhatsApp, Instagram) anzeigen.
+  // Titel möglichst unter 60 Zeichen, Beschreibung unter 155.
+  metaTitle: 'VIER KIPPEN ZWEI BIER | Podcast über Rap, Clubkultur & Fußball',
+  metaDescription: 'Till und Fritz reden über Rap, Clubkultur, Fußball und alles dazwischen. Aufgenommen in der Venus Bar Karlsruhe, jeden Donnerstag eine neue Folge.',
+
   links: {
     spotify: 'https://open.spotify.com/show/7zLEk5j2OvZNmY3BaYjprm',
     apple: 'https://podcasts.apple.com/de/podcast/id1872063614',

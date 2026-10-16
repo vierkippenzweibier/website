@@ -94,6 +94,11 @@ function layout({ title, description, body, path = '' }) {
 <meta property="og:type" content="website">
 ${hasPhoto ? `<meta property="og:image" content="https://${config.domain}/${config.photo}">` : ''}
 <meta name="theme-color" content="#fcf7e5">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32.png">
+<link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon.png">
+<meta property="og:site_name" content="VIER KIPPEN ZWEI BIER">
+<meta property="og:locale" content="de_DE">
 <link rel="alternate" type="application/rss+xml" title="VIER KIPPEN ZWEI BIER" href="${config.feed}">
 <link rel="stylesheet" href="/style.css?v=${V.css}">
 </head>
@@ -141,8 +146,8 @@ function home(eps) {
   }));
 
   return layout({
-    title: 'VIER KIPPEN ZWEI BIER – Podcast aus Karlsruhe',
-    description: `${config.claim} ${config.release}`.replace(/^./, (c) => c.toUpperCase()),
+    title: config.metaTitle,
+    description: config.metaDescription,
     body: `<main>
 <section class="hero wrap" aria-label="Willkommen">
 <ul class="listen" aria-label="Hier hören und folgen">
@@ -269,8 +274,9 @@ for (const p of ['impressum', 'datenschutz']) {
   const src = await readFile(`pages/${p}.html`, 'utf8');
   const title = src.match(/<h1>(.*?)<\/h1>/)?.[1] || p;
   await mkdir(`${OUT}/${p}`, { recursive: true });
-  await writeFile(`${OUT}/${p}/index.html`, layout({ title: `${title} – VIER KIPPEN ZWEI BIER`, description: title, path: `${p}/`, body: `<main class="wrap page">${src}</main>` }));
+  await writeFile(`${OUT}/${p}/index.html`, layout({ title: `${title} | VIER KIPPEN ZWEI BIER`, description: title, path: `${p}/`, body: `<main class="wrap page">${src}</main>` }));
 }
+await cp('assets/icons/favicon.ico', `${OUT}/favicon.ico`);
 await writeFile(`${OUT}/CNAME`, `${config.domain}\n`);
 await writeFile(`${OUT}/robots.txt`, `User-agent: *\nAllow: /\n`);
 
