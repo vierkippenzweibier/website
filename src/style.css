@@ -104,7 +104,6 @@ a:hover { color: var(--accent); }
 /* Hosts */
 .about { margin-top: 20px; }
 .about p { margin: 0 0 16px; }
-.about p:first-child { font-size: 19px; }
 .hosts { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 32px; margin-top: 36px; }
 .hosts p { margin: 8px 0 0; }
 
