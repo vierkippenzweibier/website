@@ -11,6 +11,11 @@ export default {
   metaTitle: 'VIER KIPPEN ZWEI BIER | Podcast über Rap, Clubkultur & Fußball',
   metaDescription: 'Till und Fritz reden über Rap, Clubkultur, Fußball und alles dazwischen. Aufgenommen in der Venus Bar Karlsruhe, jeden Donnerstag eine neue Folge.',
 
+  // Für Google: andere Schreibweisen des Namens, Hosts und weitere offizielle Profile.
+  alternateNames: ['4K2B', 'Vier Kippen Zwei Bier'],
+  people: ['Till', 'Fritz'],
+  sameAs: ['https://vierkippenzweibier.podigee.io/'],
+
   links: {
     spotify: 'https://open.spotify.com/show/7zLEk5j2OvZNmY3BaYjprm',
     apple: 'https://podcasts.apple.com/de/podcast/id1872063614',

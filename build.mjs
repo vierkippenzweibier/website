@@ -124,6 +124,32 @@ ${body}
 `;
 }
 
+// Sagt Google: Diese Domain, Spotify, Apple, Instagram und TikTok sind alle derselbe Podcast.
+// Hilft, dass bei der Suche nach dem Namen die eigene Seite oben steht.
+function brandData(eps) {
+  const site = `https://${config.domain}/`;
+  const L = config.links;
+  return {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'WebSite', '@id': `${site}#website`, url: site,
+        name: 'VIER KIPPEN ZWEI BIER', alternateName: config.alternateNames || [], inLanguage: 'de-DE',
+      },
+      {
+        '@type': 'PodcastSeries', '@id': `${site}#podcast`, url: site,
+        name: 'VIER KIPPEN ZWEI BIER', alternateName: config.alternateNames || [],
+        description: config.metaDescription, inLanguage: 'de-DE',
+        ...(hasPhoto ? { image: `${site}${config.photo}` } : {}),
+        webFeed: config.feed,
+        author: (config.people || []).map((name) => ({ '@type': 'Person', name })),
+        sameAs: [L.spotify, L.apple, L.instagram, L.tiktok, ...(config.sameAs || [])].filter(Boolean),
+        numberOfEpisodes: eps.length,
+      },
+    ],
+  };
+}
+
 let hasPhoto = false;
 const photoSizes = [];
 
@@ -228,6 +254,7 @@ ${config.faq.map((f) => `<details class="acc faq-item">
   '@context': 'https://schema.org', '@type': 'FAQPage',
   mainEntity: config.faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a.replace(/<[^>]+>/g, '') } })),
 }).replace(/</g, '\\u003c')}</script>` : ''}
+<script type="application/ld+json">${JSON.stringify(brandData(eps)).replace(/</g, '\\u003c')}</script>
 </main>
 <script type="application/json" id="episodes-data">${JSON.stringify(data).replace(/</g, '\\u003c')}</script>
 <script src="/player.js?v=${V.js}" defer></script>`,
@@ -296,6 +323,18 @@ for (const p of ['impressum', 'datenschutz']) {
 }
 await cp('assets/icons/favicon.ico', `${OUT}/favicon.ico`);
 await writeFile(`${OUT}/CNAME`, `${config.domain}\n`);
-await writeFile(`${OUT}/robots.txt`, `User-agent: *\nAllow: /\n`);
+// Sitemap für Google. Startseite ändert sich mit jeder Folge, daher deren Datum.
+const day = (d) => d.toISOString().slice(0, 10);
+const pages = [
+  { loc: '', lastmod: day(eps[0].date) },
+  { loc: 'impressum/', lastmod: day(new Date()) },
+  { loc: 'datenschutz/', lastmod: day(new Date()) },
+];
+await writeFile(`${OUT}/sitemap.xml`, `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${pages.map((p) => `<url><loc>https://${config.domain}/${p.loc}</loc><lastmod>${p.lastmod}</lastmod></url>`).join('\n')}
+</urlset>
+`);
+await writeFile(`${OUT}/robots.txt`, `User-agent: *\nAllow: /\n\nSitemap: https://${config.domain}/sitemap.xml\n`);
 
 console.log(`Fertig: ${eps.length} Folgen, neueste #${eps[0].no} ${eps[0].hook}${hasPhoto ? '' : ' (noch ohne Foto)'}, ${eps.filter((e) => e.coverFile).length} Cover`);
