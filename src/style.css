@@ -118,6 +118,8 @@ a:hover { color: var(--accent); }
 .episodes .et { font-size: 15px; color: var(--muted); }
 .episodes .go { flex: 0 0 auto; border: 0; background: none; font: inherit; font-size: 14px; letter-spacing: .14em; text-transform: uppercase; cursor: pointer; color: var(--ink); text-decoration: underline; text-underline-offset: 3px; padding: 10px 0; }
 .episodes .go:hover, .episodes li.is-current .go { color: var(--accent); }
+.episodes li[hidden] { display: none; }
+.episodes .new { color: var(--accent); text-transform: uppercase; letter-spacing: .14em; font-size: 13px; }
 .more { margin: 22px 0 0; font-size: 14px; letter-spacing: .14em; text-transform: uppercase; }
 
 /* Hosts */

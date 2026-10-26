@@ -73,8 +73,11 @@
       bar.value = 0; bar.style.setProperty('--p', '0%');
       cur.textContent = '0:00';
       showEpisode(ep);
+      // Die Folge oben im Player steht nicht doppelt in der Liste, alle anderen schon.
       document.querySelectorAll('.episodes li').forEach(function (li) {
-        li.classList.toggle('is-current', Number(li.dataset.i) === i);
+        var on = Number(li.dataset.i) === i;
+        li.classList.toggle('is-current', on);
+        li.hidden = on;
       });
     }
     if (seek != null) {

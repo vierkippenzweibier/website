@@ -223,10 +223,10 @@ ${chapterItems(latest)}
 <details class="acc">
 <summary><h2 class="h h-m">LETZTE FOLGEN</h2><span class="acc-i" aria-hidden="true"></span></summary>
 <ul class="episodes">
-${list.slice(1).map((e, i) => `<li data-i="${i + 1}">
+${list.map((e, i) => `<li data-i="${i}"${i === 0 ? ' class="is-current" hidden' : ''}>
 <span class="no">#${esc(e.no)}</span>
-<div class="txt"><div class="eh">${esc(e.hook)}</div>${e.things ? `<div class="et">${esc(e.things)}</div>` : ''}<div class="et">${date(e.date)} · ${mins(e.duration)}</div></div>
-<button class="go" type="button" data-play="${i + 1}">Hören</button>
+<div class="txt"><div class="eh">${esc(e.hook)}</div>${e.things ? `<div class="et">${esc(e.things)}</div>` : ''}<div class="et">${i === 0 ? '<span class="new">Neue Folge</span> · ' : ''}${date(e.date)} · ${mins(e.duration)}</div></div>
+<button class="go" type="button" data-play="${i}">Hören</button>
 </li>`).join('\n')}
 </ul>
 <p class="more"><a href="https://vierkippenzweibier.podigee.io/episodes">Alle ${eps.length} Folgen</a></p>
