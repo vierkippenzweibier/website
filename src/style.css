@@ -40,7 +40,7 @@ a:hover { color: var(--accent); }
 .buehne .logo, .buehne .nav a { color: var(--cream); }
 .buehne .nav { border-bottom-color: rgba(252, 247, 229, .28); }
 .buehne .nav a:hover, .buehne .logo:hover { color: var(--accent); }
-.hero { padding-top: 40px; }
+.hero { padding-top: 22px; } /* gleicher Abstand zur Linie wie die Navigation darüber */
 .listen { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin: 0 auto 8px; list-style: none; }
 .btn { display: flex; flex-direction: column; justify-content: center; min-width: 168px; min-height: 58px; padding: 8px 18px; background: transparent; color: var(--cream); text-decoration: none; border: 2px solid rgba(252, 247, 229, .55); transition: background .15s, border-color .15s; }
 .btn small { font-size: 11px; letter-spacing: .16em; text-transform: uppercase; line-height: 1.2; opacity: .8; }
