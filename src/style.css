@@ -172,7 +172,7 @@ a:hover { color: var(--accent); }
   .ch-acc .acc-i::before, .ch-acc .acc-i::after { top: 9px; left: 2px; right: 2px; }
   .ch-acc[open] { padding-bottom: 12px; }
   .player { margin-top: 20px; padding: 14px 16px; gap: 14px; }
-  .foot { margin-top: 56px; padding-bottom: 32px; }
+  .foot { margin-top: 56px; padding-bottom: 32px; column-gap: 20px; }
   .faq-item > summary { padding: 14px 0; }
   .faq-q { font-size: 18px; }
   .listen { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
@@ -220,7 +220,7 @@ section[id] { scroll-margin-top: 48px; } /* Sprungziele (Folgen, Über uns) mit 
 }
 
 /* Mobil: Direkteinstieg in die neue Folge, Social-Buttons im Fuß */
-.newcta, .foot-soc { display: none; }
+.newcta, .foot .foot-soc { display: none; }
 @media (max-width: 760px) {
   .listen .soc { display: none; } /* Instagram und TikTok wandern mobil in den Fuß */
   .newcta { display: flex; align-items: center; gap: 16px; margin: 0 20px 16px; padding: 14px 16px; background: var(--accent); color: var(--cream); text-decoration: none; }
@@ -230,8 +230,5 @@ section[id] { scroll-margin-top: 48px; } /* Sprungziele (Folgen, Über uns) mit 
   .newcta-t span { font-family: var(--display); font-size: 22px; letter-spacing: .03em; line-height: 1.1; text-transform: uppercase; }
   .newcta-i { flex: 0 0 44px; width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--cream); display: grid; place-items: center; }
   .newcta-i svg { width: 16px; height: 16px; margin-left: 2px; }
-  .foot-soc { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 56px 0 0; padding: 0; list-style: none; }
-  .foot-soc + .foot { margin-top: 24px; }
-  .btn-ink { color: var(--ink); border-color: var(--ink); min-width: 0; padding: 8px 14px; }
-  .btn-ink:hover { color: var(--cream); }
+  .foot .foot-soc { display: flex; gap: 20px; } /* schlanke Textlinks, gleicher Stil wie Impressum */
 }

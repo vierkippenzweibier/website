@@ -115,13 +115,9 @@ ${stage ? '<div class="buehne">' : ''}<header class="head wrap">
 </header>
 ${stage ? `${stage}\n</div>` : ''}
 ${body}
-<footer class="wrap">
-<ul class="foot-soc" aria-label="Folgen auf">
-<li><a class="btn btn-ink" href="${config.links.instagram}"><small>Folgen auf</small><span>Instagram</span></a></li>
-<li><a class="btn btn-ink" href="${config.links.tiktok}"><small>Folgen auf</small><span>TikTok</span></a></li>
-</ul>
-<div class="foot">
+<footer class="wrap"><div class="foot">
 <span>${esc(config.footer)}</span>
+<nav class="foot-soc" aria-label="Social Media"><a href="${config.links.instagram}">Instagram</a><a href="${config.links.tiktok}">TikTok</a></nav>
 <nav aria-label="Rechtliches"><a href="/impressum/">Impressum</a><a href="/datenschutz/">Datenschutz</a></nav>
 </div></footer>
 <script src="/countdown.js?v=${V.cd}" defer></script>
