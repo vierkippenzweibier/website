@@ -234,3 +234,32 @@ section[id] { scroll-margin-top: 48px; } /* Sprungziele (Folgen, Über uns) mit 
   .newcta-i svg { width: 16px; height: 16px; margin-left: 2px; }
   .foot .foot-soc { display: flex; gap: 14px; } /* schlanke Textlinks, gleicher Stil wie Impressum */
 }
+
+/* Einheitlicher Rhythmus unterhalb der Bühne: wie in der Bühne 22 px vor und nach jeder Trennlinie (mobil 16 px) */
+:root { --gap: 22px; }
+.section { margin-top: var(--gap); padding-top: var(--gap); }
+#folge .section { margin-top: calc(var(--gap) * 2); padding-top: 0; border-top: 0; }
+.player { margin-top: var(--gap); }
+.ch-acc { margin-top: var(--gap); }
+.chapters { margin-top: var(--gap); }
+.chapters li:last-child button { padding-bottom: 0; }
+.episodes, .more, .about, .faq { margin-top: var(--gap); }
+.about p:last-child { margin-bottom: 0; }
+.press { margin-top: var(--gap); padding-top: var(--gap); }
+.foot { margin-top: var(--gap); }
+@media (max-width: 760px) {
+  :root { --gap: 16px; }
+  .section { margin-top: var(--gap); padding-top: var(--gap); }
+  #folge .section { margin-top: calc(var(--gap) * 2); }
+  .ch-acc { margin-top: var(--gap); }
+  .chapters { margin-top: 0; }
+  .press { margin-top: var(--gap); padding-top: var(--gap); }
+  .foot { margin-top: var(--gap); }
+}
+
+/* Link zur Folge auf Spotify */
+.sp-link { margin: 14px 0 0; font-size: 14px; letter-spacing: .14em; text-transform: uppercase; }
+.sp-link a::after { content: ' →'; }
+@media (max-width: 760px) {
+  .ch-acc { border-bottom: 0; } /* keine Doppellinie vor der nächsten Trennlinie */
+}

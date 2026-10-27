@@ -92,7 +92,11 @@ function layout({ title, description, body, path = '', stage = '' }) {
 <meta property="og:description" content="${esc(description)}">
 <meta property="og:url" content="${url}">
 <meta property="og:type" content="website">
-${hasPhoto ? `<meta property="og:image" content="https://${config.domain}/${config.photo}">` : ''}
+${config.ogImage ? `<meta property="og:image" content="https://${config.domain}/${config.ogImage}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="VIER KIPPEN ZWEI BIER – Podcast-Cover">
+<meta name="twitter:card" content="summary_large_image">` : hasPhoto ? `<meta property="og:image" content="https://${config.domain}/${config.photo}">` : ''}
 <meta name="theme-color" content="#fcf7e5">
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32.png">
@@ -152,6 +156,42 @@ function brandData(eps) {
   };
 }
 
+
+// Spotify-Link pro Folge. Braucht SPOTIFY_CLIENT_ID und SPOTIFY_CLIENT_SECRET (GitHub-Secrets).
+// Ohne Zugangsdaten oder wenn eine Folge (noch) nicht gefunden wird, führt der Link zur Show.
+async function addSpotifyLinks(eps) {
+  const id = process.env.SPOTIFY_CLIENT_ID, secret = process.env.SPOTIFY_CLIENT_SECRET;
+  const show = ((config.links.spotify || '').match(/show\/([A-Za-z0-9]+)/) || [])[1];
+  if (!id || !secret || !show || process.env.FEED_FILE) { console.log('Spotify: keine Zugangsdaten, Folgen verlinken auf die Show'); return; }
+  try {
+    const t = await fetch('https://accounts.spotify.com/api/token', {
+      method: 'POST',
+      headers: { Authorization: `Basic ${Buffer.from(`${id}:${secret}`).toString('base64')}`, 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: 'grant_type=client_credentials',
+    }).then((r) => r.json());
+    if (!t.access_token) throw new Error('kein Token');
+    const list = [];
+    let url = `https://api.spotify.com/v1/shows/${show}/episodes?market=DE&limit=50`;
+    while (url && list.length < 1000) {
+      const r = await fetch(url, { headers: { Authorization: `Bearer ${t.access_token}` } });
+      if (!r.ok) throw new Error(`Spotify antwortet ${r.status}`);
+      const j = await r.json();
+      list.push(...(j.items || []).filter(Boolean));
+      url = j.next;
+    }
+    const norm = (x = '') => x.toLowerCase().replace(/[^a-z0-9äöüß]+/g, ' ').trim();
+    const num = (x = '') => { const m = x.match(/^#\s*(\d+)/) || x.match(/EP\s*(\d+)/i); return m ? Number(m[1]) : null; };
+    let hit = 0;
+    for (const e of eps) {
+      const m = list.find((s) => (e.no && num(s.name) === Number(e.no)) || norm(s.name) === norm(e.title));
+      if (m && m.external_urls && m.external_urls.spotify) { e.spotify = m.external_urls.spotify; hit++; }
+    }
+    console.log(`Spotify: ${hit} von ${eps.length} Folgen direkt verlinkt`);
+  } catch (err) {
+    console.log(`Spotify-Abgleich übersprungen (${err.message}), Folgen verlinken auf die Show`);
+  }
+}
+
 let hasPhoto = false;
 const photoSizes = [];
 
@@ -172,6 +212,7 @@ function home(eps) {
     audio: e.audio, duration: e.duration, label: `#${e.no} ${e.hook}`,
     eyebrow: eyebrow(e, i), hook: e.hook, subtitle: e.subtitle,
     cover: e.coverFile ? `/${e.coverFile}` : '', coverAlt: `Cover von Folge #${e.no}`,
+    spotify: e.spotify || L.spotify,
     chapters: e.chapters.map((c) => ({ start: c.start, t: clock(c.start), title: c.title })),
   }));
 
@@ -199,6 +240,7 @@ function home(eps) {
 <p class="eyebrow" data-eyebrow>${esc(eyebrow(latest, 0))}</p>
 <h2 class="h h-xl" data-hook>${esc(latest.hook)}</h2>
 <p class="lede" data-lede${latest.subtitle ? '' : ' hidden'}>${esc(latest.subtitle)}</p>
+<p class="sp-link"><a data-spotify href="${esc(latest.spotify || L.spotify)}">Auf Spotify hören</a></p>
 </div>
 <img class="cover" data-cover src="${cover ? `/${cover}` : ''}" alt="Cover von Folge #${esc(latest.no)}" width="600" height="600" loading="lazy"${cover ? '' : ' hidden'}>
 </div>
@@ -277,6 +319,7 @@ ${config.faq.map((f) => `<details class="acc faq-item">
 // ---------- Bauen ----------
 const xml = await loadFeed();
 const eps = parse(xml);
+await addSpotifyLinks(eps);
 if (!eps.length) throw new Error('Keine Folgen im Feed gefunden');
 
 await rm(OUT, { recursive: true, force: true });

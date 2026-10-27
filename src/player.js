@@ -20,6 +20,7 @@
   var $ = function (sel) { return document.querySelector(sel); };
   var eyebrowEl = $('[data-eyebrow]'), hookEl = $('[data-hook]'), ledeEl = $('[data-lede]');
   var coverEl = $('[data-cover]'), chaptersEl = $('[data-chapters]');
+  var spEl = $('[data-spotify]');
   var chWrap = $('[data-chapters-wrap]'), chCount = $('[data-ch-count]');
   // Am Handy sind die Kapitel zugeklappt, am Desktop immer offen.
   var mobile = window.matchMedia && window.matchMedia('(max-width: 760px)');
@@ -32,6 +33,7 @@
     if (eyebrowEl) eyebrowEl.textContent = ep.eyebrow;
     if (hookEl) hookEl.textContent = ep.hook;
     if (ledeEl) { ledeEl.textContent = ep.subtitle || ''; ledeEl.hidden = !ep.subtitle; }
+    if (spEl && ep.spotify) spEl.href = ep.spotify;
     if (coverEl) {
       if (ep.cover) { coverEl.src = ep.cover; coverEl.alt = ep.coverAlt; coverEl.hidden = false; }
       else coverEl.hidden = true;

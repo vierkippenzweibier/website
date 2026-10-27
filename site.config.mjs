@@ -69,6 +69,7 @@ export default {
 
   // Foto in assets/ ablegen und hier den Dateinamen eintragen.
   photo: 'assets/venus.jpg',
+  ogImage: 'assets/og.jpg', // Vorschaubild beim Teilen (1200 × 630)
   photoAlt: 'Fritz und Till an der Theke der Venus Bar in Karlsruhe',
 
   // Wie viele ältere Folgen unter der neuesten stehen.
