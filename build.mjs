@@ -246,7 +246,7 @@ ${(config.press || []).map((a) => `<article class="press">
 <p class="eyebrow">Presse · ${esc(a.outlet)} · ${esc(a.date)}</p>
 <h3 class="h press-h"><a href="${esc(a.url)}">${esc(a.title)}</a></h3>
 <p>${esc(a.intro)}</p>
-<p class="press-by">Text: ${esc(a.author)} · ${esc(a.outletLong)}</p>
+<p class="press-by">Text: ${a.authorUrl ? `<a href="${esc(a.authorUrl)}">${esc(a.author)}</a>` : esc(a.author)} · ${esc(a.outletLong)}</p>
 <p class="press-go"><a href="${esc(a.url)}">Artikel lesen auf bnn.de</a></p>
 </div>
 </article>`).join('\n')}

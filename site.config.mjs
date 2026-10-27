@@ -79,12 +79,13 @@ export default {
     {
       outlet: 'BNN',
       outletLong: 'Badische Neueste Nachrichten',
-      date: 'TT.MM.2026', // TODO: Erscheinungsdatum
-      title: 'Podcast in Karlsruher Venus Bar: Was hinter verschlossener Tür passiert', // TODO: exakte Headline prüfen
+      date: '25.10.2026',
+      title: 'Podcast in der Karlsruher Venus-Bar: Was montags hinter verschlossener Tür passiert',
       intro: 'Die BNN war montags mit in der Venus Bar, als die Tür zu war und die Mikros an.',
       url: 'https://bnn.de/karlsruhe/karlsruhe-stadt/podcast-in-karlsruher-venus-bar-was-hinter-verschlossener-tuer-passiert',
-      author: 'AUTORIN', // TODO
-      photographer: 'FOTOGRAF', // TODO
+      author: 'Judith Midinet-Horst',
+      authorUrl: 'https://bnn.de/autor/judith-midinet-horst',
+      photographer: 'Rake Hora',
       image: 'assets/presse-bnn.jpg',
       imageAlt: 'Fritz und Till an der Theke der Venus Bar, auf dem Tresen steht ein Aufsteller mit dem Podcast-Cover',
     },
