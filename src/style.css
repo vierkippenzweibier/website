@@ -172,7 +172,8 @@ a:hover { color: var(--accent); }
   .ch-acc .acc-i::before, .ch-acc .acc-i::after { top: 9px; left: 2px; right: 2px; }
   .ch-acc[open] { padding-bottom: 12px; }
   .player { margin-top: 20px; padding: 14px 16px; gap: 14px; }
-  .foot { margin-top: 56px; padding-bottom: 32px; column-gap: 20px; }
+  .foot { margin-top: 56px; padding-bottom: 32px; column-gap: 14px; justify-content: flex-start; }
+  .foot nav { gap: 14px; font-size: 13px; letter-spacing: 0; }
   .faq-item > summary { padding: 14px 0; }
   .faq-q { font-size: 18px; }
   .listen { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
@@ -230,5 +231,5 @@ section[id] { scroll-margin-top: 48px; } /* Sprungziele (Folgen, Über uns) mit 
   .newcta-t span { font-family: var(--display); font-size: 22px; letter-spacing: .03em; line-height: 1.1; text-transform: uppercase; }
   .newcta-i { flex: 0 0 44px; width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--cream); display: grid; place-items: center; }
   .newcta-i svg { width: 16px; height: 16px; margin-left: 2px; }
-  .foot .foot-soc { display: flex; gap: 20px; } /* schlanke Textlinks, gleicher Stil wie Impressum */
+  .foot .foot-soc { display: flex; gap: 14px; } /* schlanke Textlinks, gleicher Stil wie Impressum */
 }
