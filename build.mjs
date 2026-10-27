@@ -107,8 +107,8 @@ ${hasPhoto ? `<meta property="og:image" content="https://${config.domain}/${conf
 ${stage ? '<div class="buehne">' : ''}<header class="head wrap">
 <a class="logo" href="/">VIER KIPPEN ZWEI BIER</a>
 <nav aria-label="Hauptmenü"><ul class="nav">
-<li><a href="/#folge">Podcast</a></li>
-<li><a href="/#folgen">Folgen</a></li>
+<li><a href="/">Podcast</a></li>
+<li><a href="/#folge">Folgen</a></li>
 <li><a href="/#wir">Über uns</a></li>
 <li><a href="mailto:vierkippenzweibier@web.de">Kontakt</a></li>
 </ul></nav>
