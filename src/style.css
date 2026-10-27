@@ -47,7 +47,8 @@ a:hover { color: var(--accent); }
 .btn span { font-family: var(--display); font-size: 20px; letter-spacing: .04em; line-height: 1.15; }
 .btn:hover { background: var(--accent); border-color: var(--accent); color: var(--cream); }
 .stage { position: relative; max-width: 1600px; margin: 0 auto; }
-.photo { margin: 0 auto; width: min(100%, calc(82vh * 4 / 3)); }
+.photo { --pw: min(100vw, 1600px, calc(82vh * 4 / 3)); margin: calc(var(--pw) * -0.13) auto 0; width: var(--pw); }
+.listen { position: relative; z-index: 1; }
 .photo img, .photo .ph { display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; background: var(--stage); }
 .photo img {
   -webkit-mask-image: linear-gradient(to right, transparent 0, #000 14%, #000 86%, transparent 100%), linear-gradient(to bottom, transparent 0, #000 8%, #000 80%, transparent 100%);
@@ -175,7 +176,7 @@ a:hover { color: var(--accent); }
   .btn { min-width: 0; padding: 8px 14px; }
   .btn span { font-size: 17px; white-space: nowrap; }
   .listen { padding: 0 20px; }
-  .photo { width: 100%; }
+  .photo { width: 100%; margin-top: -11vw; }
   .photo img {
     -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 6%, #000 82%, transparent 100%);
     mask-image: linear-gradient(to bottom, transparent 0, #000 6%, #000 82%, transparent 100%);
