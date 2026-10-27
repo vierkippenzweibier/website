@@ -57,7 +57,7 @@ a:hover { color: var(--accent); }
   mask-composite: intersect;
 }
 .photo .ph { display: flex; align-items: center; justify-content: center; color: var(--cream); font-size: 15px; }
-.claim { position: absolute; right: max(24px, calc(50% - 560px)); bottom: 20%; width: 300px; margin: 0; padding: 22px 22px; background: rgba(16, 18, 13, .82); border: 2px solid var(--cream); color: var(--cream); font-size: 17px; line-height: 1.5; letter-spacing: .02em; }
+.claim { position: absolute; right: max(24px, calc(50% - 560px)); bottom: 34%; width: 300px; margin: 0; padding: 22px 22px; background: rgba(16, 18, 13, .82); border: 2px solid var(--cream); color: var(--cream); font-size: 17px; line-height: 1.5; letter-spacing: .02em; }
 
 /* Abschnitte */
 .section { margin-top: 88px; padding-top: 28px; border-top: var(--line); }
@@ -177,6 +177,7 @@ a:hover { color: var(--accent); }
   .btn span { font-size: 17px; white-space: nowrap; }
   .listen { padding: 0 20px; }
   .photo { width: 100%; margin-top: -11vw; }
+  .photo img { aspect-ratio: 100 / 105; object-position: 50% 50%; } /* höher als 4:3, Seiten werden beschnitten statt verzerrt */
   .photo img {
     -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 6%, #000 82%, transparent 100%);
     mask-image: linear-gradient(to bottom, transparent 0, #000 6%, #000 82%, transparent 100%);
