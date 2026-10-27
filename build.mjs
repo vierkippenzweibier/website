@@ -78,7 +78,7 @@ const date = (d) => d.toLocaleDateString('de-DE', { day: '2-digit', month: '2-di
 const clock = (s) => [Math.floor(s / 3600), Math.floor(s % 3600 / 60), s % 60].map((n) => String(n).padStart(2, '0')).join(':');
 const mins = (s) => `${Math.round(s / 60)} Min`;
 
-function layout({ title, description, body, path = '' }) {
+function layout({ title, description, body, path = '', stage = '' }) {
   const url = `https://${config.domain}/${path}`;
   return `<!doctype html>
 <html lang="de">
@@ -104,7 +104,7 @@ ${hasPhoto ? `<meta property="og:image" content="https://${config.domain}/${conf
 </head>
 <body>
 <div class="topbar" role="status"><div class="wrap"><span data-countdown>${esc(config.release)}</span></div></div>
-<header class="head wrap">
+${stage ? '<div class="buehne">' : ''}<header class="head wrap">
 <a class="logo" href="/">VIER KIPPEN ZWEI BIER</a>
 <nav aria-label="Hauptmenü"><ul class="nav">
 <li><a href="/#folge">Podcast</a></li>
@@ -113,6 +113,7 @@ ${hasPhoto ? `<meta property="og:image" content="https://${config.domain}/${conf
 <li><a href="mailto:vierkippenzweibier@web.de">Kontakt</a></li>
 </ul></nav>
 </header>
+${stage ? `${stage}\n</div>` : ''}
 ${body}
 <footer class="wrap"><div class="foot">
 <span>${esc(config.footer)}</span>
@@ -158,7 +159,7 @@ function home(eps) {
   const list = eps.slice(0, config.episodesOnStart + 1);
   const L = config.links;
   const photo = hasPhoto
-    ? `<img src="/${esc(config.photo)}" srcset="${photoSizes.map((s) => `/${esc(s.file)} ${s.w}w`).join(', ')}" sizes="(max-width: 760px) 100vw, 640px" alt="${esc(config.photoAlt)}" width="1280" height="960" fetchpriority="high">`
+    ? `<img src="/${esc(config.photo)}" srcset="${photoSizes.map((s) => `/${esc(s.file)} ${s.w}w`).join(', ')}" sizes="(max-width: 760px) 100vw, min(100vw, 1280px)" alt="${esc(config.photoAlt)}" width="1708" height="1281" fetchpriority="high">`
     : `<div class="ph" role="img" aria-label="${esc(config.photoAlt)}">[ Foto folgt ]</div>`;
 
   const chapterItems = (e) => e.chapters.map((c) => `<li><button type="button" data-seek="${c.start}"><span class="t">${clock(c.start)}</span><span class="ct">${esc(c.title)}</span></button></li>`).join('\n');
@@ -176,9 +177,8 @@ function home(eps) {
   return layout({
     title: config.metaTitle,
     description: config.metaDescription,
-    body: `<main>
-<section class="hero wrap" aria-label="Willkommen">
-<ul class="listen" aria-label="Hier hören und folgen">
+    stage: `<section class="hero" aria-label="Willkommen">
+<ul class="listen wrap" aria-label="Hier hören und folgen">
 <li><a class="btn" href="${L.spotify}"><small>Hören auf</small><span>Spotify</span></a></li>
 <li><a class="btn" href="${L.apple}"><small>Hören auf</small><span>Apple Podcasts</span></a></li>
 <li><a class="btn" href="${L.instagram}"><small>Folgen auf</small><span>Instagram</span></a></li>
@@ -188,7 +188,8 @@ function home(eps) {
 <figure class="photo">${photo}</figure>
 <p class="claim">${esc(config.claim)}</p>
 </div>
-</section>
+</section>`,
+    body: `<main>
 
 <section id="folge" class="wrap"><div class="section">
 <div class="ep-head${cover ? ' has-cover' : ''}">
