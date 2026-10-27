@@ -24,8 +24,9 @@ a:hover { color: var(--accent); }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
 /* Kopf */
-.topbar { background: var(--accent); color: var(--cream); font-size: 14px; letter-spacing: .04em; text-align: center; }
-.topbar .wrap { padding-top: 10px; padding-bottom: 10px; }
+.topbar { background: var(--accent); color: var(--cream); font-size: 18px; line-height: 1.4; letter-spacing: .04em; text-align: center; }
+.topbar span[data-countdown] { display: block; text-align: center; }
+.topbar .wrap { padding-top: 14px; padding-bottom: 14px; }
 .topbar a { color: var(--cream); font-weight: 700; }
 .topbar a:hover { color: var(--ink); }
 .topbar .cd { font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
@@ -37,6 +38,8 @@ a:hover { color: var(--accent); }
 
 /* Bühne: Kopf, Buttons und Foto auf durchgehend dunklem Grund */
 .buehne { background: var(--stage); color: var(--cream); }
+.buehne .head { position: relative; z-index: 2; } /* Navigation liegt über dem hochgezogenen Foto, bleibt klickbar */
+.stage .photo { pointer-events: none; }
 .buehne .logo, .buehne .nav a { color: var(--cream); }
 .buehne .nav { border-bottom-color: rgba(252, 247, 229, .28); }
 .buehne .nav a:hover, .buehne .logo:hover { color: var(--accent); }
@@ -57,7 +60,7 @@ a:hover { color: var(--accent); }
   mask-composite: intersect;
 }
 .photo .ph { display: flex; align-items: center; justify-content: center; color: var(--cream); font-size: 15px; }
-.claim { position: absolute; right: max(24px, calc(50% - 560px)); bottom: 34%; width: 300px; margin: 0; padding: 22px 22px; background: rgba(16, 18, 13, .82); border: 2px solid var(--cream); color: var(--cream); font-size: 17px; line-height: 1.5; letter-spacing: .02em; }
+.claim { position: absolute; right: max(24px, calc(50% - 640px)); bottom: 42%; width: 300px; margin: 0; padding: 22px 22px; background: rgba(16, 18, 13, .82); border: 2px solid var(--cream); color: var(--cream); font-size: 17px; line-height: 1.5; letter-spacing: .02em; }
 
 /* Abschnitte */
 .section { margin-top: 88px; padding-top: 28px; border-top: var(--line); }
@@ -152,8 +155,8 @@ a:hover { color: var(--accent); }
 @media (max-width: 760px) {
   /* Abstände am Handy: 8er-Raster, Abschnitte 56, innerhalb 16 bis 24 */
   .wrap { padding: 0 20px; }
-  .topbar { font-size: 12px; }
-  .topbar .wrap { padding-top: 8px; padding-bottom: 8px; }
+  .topbar { font-size: 15px; }
+  .topbar .wrap { padding-top: 10px; padding-bottom: 10px; }
   .topbar .cd-line { display: block; }
   .head { padding-top: 24px; }
   .logo { font-size: 9vw; }
