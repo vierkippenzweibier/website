@@ -198,3 +198,5 @@ a:hover { color: var(--accent); }
 }
 #folge .section { margin-top: 64px; padding-top: 0; border-top: 0; }
 @media (max-width: 760px) { #folge .section { margin-top: 40px; } }
+section[id] { scroll-margin-top: 48px; } /* Sprungziele (Folgen, Über uns) mit Luft nach oben */
+@media (max-width: 760px) { section[id] { scroll-margin-top: 24px; } }
