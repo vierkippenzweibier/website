@@ -115,7 +115,12 @@ ${stage ? '<div class="buehne">' : ''}<header class="head wrap">
 </header>
 ${stage ? `${stage}\n</div>` : ''}
 ${body}
-<footer class="wrap"><div class="foot">
+<footer class="wrap">
+<ul class="foot-soc" aria-label="Folgen auf">
+<li><a class="btn btn-ink" href="${config.links.instagram}"><small>Folgen auf</small><span>Instagram</span></a></li>
+<li><a class="btn btn-ink" href="${config.links.tiktok}"><small>Folgen auf</small><span>TikTok</span></a></li>
+</ul>
+<div class="foot">
 <span>${esc(config.footer)}</span>
 <nav aria-label="Rechtliches"><a href="/impressum/">Impressum</a><a href="/datenschutz/">Datenschutz</a></nav>
 </div></footer>
@@ -181,11 +186,12 @@ function home(eps) {
 <ul class="listen wrap" aria-label="Hier hören und folgen">
 <li><a class="btn" href="${L.spotify}"><small>Hören auf</small><span>Spotify</span></a></li>
 <li><a class="btn" href="${L.apple}"><small>Hören auf</small><span>Apple Podcasts</span></a></li>
-<li><a class="btn" href="${L.instagram}"><small>Folgen auf</small><span>Instagram</span></a></li>
-<li><a class="btn" href="${L.tiktok}"><small>Folgen auf</small><span>TikTok</span></a></li>
+<li class="soc"><a class="btn" href="${L.instagram}"><small>Folgen auf</small><span>Instagram</span></a></li>
+<li class="soc"><a class="btn" href="${L.tiktok}"><small>Folgen auf</small><span>TikTok</span></a></li>
 </ul>
 <div class="stage">
 <figure class="photo">${photo}</figure>
+<a class="newcta" href="#folge" data-play="0"><span class="newcta-t"><small>Neue Folge · #${esc(latest.no)}</small><span>${esc(latest.hook)}</span></span><span class="newcta-i" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4l13 8-13 8z" fill="currentColor"/></svg></span></a>
 <p class="claim">${esc(config.claim)}</p>
 </div>
 </section>`,
