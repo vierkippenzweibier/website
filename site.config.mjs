@@ -74,5 +74,20 @@ export default {
   // Wie viele ältere Folgen unter der neuesten stehen.
   episodesOnStart: 8,
 
+  // Presse unter "Über uns". Zum Ausblenden: press: [] setzen.
+  press: [
+    {
+      outlet: 'BNN',
+      outletLong: 'Badische Neueste Nachrichten',
+      date: 'TT.MM.2026', // TODO: Erscheinungsdatum
+      title: 'Podcast in Karlsruher Venus Bar: Was hinter verschlossener Tür passiert', // TODO: exakte Headline prüfen
+      intro: 'Die BNN war montags mit in der Venus Bar, als die Tür zu war und die Mikros an.',
+      url: 'https://bnn.de/karlsruhe/karlsruhe-stadt/podcast-in-karlsruher-venus-bar-was-hinter-verschlossener-tuer-passiert',
+      author: 'AUTORIN', // TODO
+      photographer: 'FOTOGRAF', // TODO
+      image: 'assets/presse-bnn.jpg',
+      imageAlt: 'Fritz und Till an der Theke der Venus Bar, auf dem Tresen steht ein Aufsteller mit dem Podcast-Cover',
+    },
+  ],
   footer: 'Montags. Venus Bar. Ihr wisst Bescheid.',
 };

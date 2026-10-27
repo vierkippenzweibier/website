@@ -240,6 +240,16 @@ ${(config.about || []).length ? `<div class="about">${config.about.map((t) => `<
 ${config.hosts.length ? `<div class="hosts">
 ${config.hosts.map((h) => `<div><div class="h h-m">${esc(h.name)}</div><p>${esc(h.text)}</p></div>`).join('\n')}
 </div>` : ''}
+${(config.press || []).map((a) => `<article class="press">
+<figure class="press-img"><img src="/${esc(a.image)}" alt="${esc(a.imageAlt)}" width="970" height="546" loading="lazy"><figcaption>Foto: ${esc(a.photographer)} / ${esc(a.outlet)}</figcaption></figure>
+<div class="press-txt">
+<p class="eyebrow">Presse · ${esc(a.outlet)} · ${esc(a.date)}</p>
+<h3 class="h press-h"><a href="${esc(a.url)}">${esc(a.title)}</a></h3>
+<p>${esc(a.intro)}</p>
+<p class="press-by">Text: ${esc(a.author)} · ${esc(a.outletLong)}</p>
+<p class="press-go"><a href="${esc(a.url)}">Artikel lesen auf bnn.de</a></p>
+</div>
+</article>`).join('\n')}
 </div></section>
 ${(config.faq || []).length ? `
 <section id="faq" class="wrap"><div class="section">

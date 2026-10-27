@@ -200,3 +200,21 @@ a:hover { color: var(--accent); }
 @media (max-width: 760px) { #folge .section { margin-top: 40px; } }
 section[id] { scroll-margin-top: 48px; } /* Sprungziele (Folgen, Über uns) mit Luft nach oben */
 @media (max-width: 760px) { section[id] { scroll-margin-top: 24px; } }
+
+/* Presse unter Über uns */
+.press { display: flex; align-items: center; gap: 40px; margin-top: 48px; padding-top: 32px; border-top: 1px solid #cfc6aa; }
+.press-img { flex: 0 0 52%; margin: 0; }
+.press-img img { display: block; width: 100%; height: auto; border: var(--line); }
+.press-img figcaption { margin-top: 8px; font-size: 13px; color: var(--muted); }
+.press-txt { flex: 1 1 0; min-width: 0; }
+.press-txt .eyebrow { color: var(--accent); font-weight: 700; }
+.press-h { font-size: 28px; margin: 0 0 14px; }
+.press-h a { text-decoration: none; }
+.press-txt p { margin: 0 0 12px; }
+.press-by { font-size: 14px; color: var(--muted); }
+.press-go { margin-top: 20px !important; font-size: 14px; letter-spacing: .14em; text-transform: uppercase; }
+.press-go a::after { content: ' →'; }
+@media (max-width: 760px) {
+  .press { flex-direction: column; align-items: stretch; gap: 20px; margin-top: 40px; padding-top: 24px; }
+  .press-h { font-size: 24px; }
+}
