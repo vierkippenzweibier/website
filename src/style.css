@@ -172,7 +172,8 @@ a:hover { color: var(--accent); }
   .ch-acc .acc-i::before, .ch-acc .acc-i::after { top: 9px; left: 2px; right: 2px; }
   .ch-acc[open] { padding-bottom: 12px; }
   .player { margin-top: 20px; padding: 14px 16px; gap: 14px; }
-  .foot { margin-top: 56px; padding-bottom: 32px; column-gap: 14px; justify-content: flex-start; }
+  .foot { margin-top: 56px; padding-bottom: 32px; column-gap: 14px; justify-content: center; text-align: center; }
+  .foot > span { flex: 0 0 100%; } /* Spruch eigene Zeile, alles mittig */
   .foot nav { gap: 14px; font-size: 13px; letter-spacing: 0; }
   .faq-item > summary { padding: 14px 0; }
   .faq-q { font-size: 18px; }
