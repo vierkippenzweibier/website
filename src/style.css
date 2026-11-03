@@ -3,13 +3,13 @@
 @font-face { font-family: 'Courier Prime'; src: url('fonts/courier-prime-700.woff2') format('woff2'); font-weight: 700; font-display: swap; }
 
 :root {
-  --cream: #d5d8dc; /* Silbergrau wie Tills Trikot, Hintergrund */
-  --paper: #b4b8be; /* dunkleres Silber, z. B. Player-Spur */
-  --light: #f2f3f5; /* helle Schrift auf dunklem Grund */
+  --cream: #eaeff1; /* Silberweiß wie Tills Trikot, Hintergrund */
+  --paper: #c9d0d4; /* dunkleres Silber, z. B. Player-Spur */
+  --light: #f4f8f9; /* helle Schrift auf dunklem Grund */
   --ink: #121110;
   --muted: #4a4d52;
   --accent: #ff3d17; /* Signalrot, Flächen und auf dunklem Grund */
-  --accent-ink: #a61a05; /* dunkleres Rot für Schrift auf Silber, damit sie lesbar bleibt */
+  --accent-ink: #c0200a; /* dunkleres Rot für Schrift auf Silber, damit sie lesbar bleibt */
   --stage: #10120d; /* Farbe des Vorhangs im Foto, damit die Ränder nahtlos auslaufen */
   --line: 2px solid var(--ink);
   --display: 'Anton', Impact, 'Arial Narrow', sans-serif;
@@ -43,11 +43,11 @@ a:hover { color: var(--accent-ink); }
 .buehne .head { position: relative; z-index: 2; } /* Navigation liegt über dem hochgezogenen Foto, bleibt klickbar */
 .stage .photo { pointer-events: none; }
 .buehne .logo, .buehne .nav a { color: var(--light); }
-.buehne .nav { border-bottom-color: rgba(242, 243, 245, .28); }
+.buehne .nav { border-bottom-color: rgba(244, 248, 249, .28); }
 .buehne .nav a:hover, .buehne .logo:hover { color: var(--accent); }
 .hero { padding-top: 22px; } /* gleicher Abstand zur Linie wie die Navigation darüber */
 .listen { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin: 0 auto 8px; list-style: none; }
-.btn { display: flex; flex-direction: column; justify-content: center; min-width: 168px; min-height: 58px; padding: 8px 18px; background: transparent; color: var(--light); text-decoration: none; border: 2px solid rgba(242, 243, 245, .55); transition: background .15s, border-color .15s; }
+.btn { display: flex; flex-direction: column; justify-content: center; min-width: 168px; min-height: 58px; padding: 8px 18px; background: transparent; color: var(--light); text-decoration: none; border: 2px solid rgba(244, 248, 249, .55); transition: background .15s, border-color .15s; }
 .btn small { font-size: 11px; letter-spacing: .16em; text-transform: uppercase; line-height: 1.2; opacity: .8; }
 .btn span { font-family: var(--display); font-size: 20px; letter-spacing: .04em; line-height: 1.15; }
 .btn:hover { background: var(--accent); border-color: var(--accent); color: var(--ink); }
