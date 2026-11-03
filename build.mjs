@@ -97,7 +97,7 @@ ${config.ogImage ? `<meta property="og:image" content="https://${config.domain}/
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="VIER KIPPEN ZWEI BIER – Podcast-Cover">
 <meta name="twitter:card" content="summary_large_image">` : hasPhoto ? `<meta property="og:image" content="https://${config.domain}/${config.photo}">` : ''}
-<meta name="theme-color" content="#fcf7e5">
+<meta name="theme-color" content="#d5d8dc">
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32.png">
 <link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon.png">
