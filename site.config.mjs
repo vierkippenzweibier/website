@@ -6,6 +6,9 @@ export default {
   claim: 'Till und Fritz reden über Rap, Clubkultur, Fußball und alles dazwischen. Montags, wenn die Venus Bar zu hat. So lange, wie vier Kippen und zwei Bier halten.',
   release: 'Jeden Donnerstag eine neue Folge.',
 
+  // Laufband unter dem Foto. Begriffe einfach ergänzen oder streichen.
+  ticker: ['Rap', 'Clubkultur', 'Fußball', 'Montags in der Venus Bar', 'Vier Kippen', 'Zwei Bier', 'Die dreisten Drei', 'Letzte Runde'],
+
   // Was Google und Link-Vorschauen (WhatsApp, Instagram) anzeigen.
   // Titel möglichst unter 60 Zeichen, Beschreibung unter 155.
   metaTitle: 'VIER KIPPEN ZWEI BIER | Podcast über Rap, Clubkultur & Fußball',
@@ -29,6 +32,13 @@ export default {
     'Die beiden kommen aus derselben Szene, nur von verschiedenen Seiten. Till stand als Rapper Schote selbst auf der Bühne und betreibt die Venus Bar. Fritz legt seit 2010 als eine Hälfte des DJ-Duos Pneumatix auf, ist Düsseldorfer in Karlsruhe und hält der Fortuna die Treue. Einig sind sich die beiden dabei längst nicht immer.',
     'Ein Drehbuch gibt es nicht, ein festes Gerüst schon. In „Die dreisten Drei“ kommen jede Woche drei steile Thesen auf den Tisch, in der „Letzten Runde“ geht es um Fragen der Hörerinnen und Hörer. Dazu die Spieltage von KSC und Fortuna, neue Musik und das, was online gerade hochkocht. Wer aus Karlsruhe kommt, erkennt manches wieder. Kennen muss man die Stadt dafür nicht.',
     'Neue Folgen erscheinen in der Nacht auf Donnerstag, um Mitternacht, auf Spotify, Apple Podcasts und hier auf der Seite.',
+  ],
+
+  // Feste Rubriken unter "Über uns", groß nummeriert.
+  rubriken: [
+    { name: 'Die dreisten Drei', text: 'Drei steile Thesen, jede in einem Satz. Danach wird gestritten.' },
+    { name: '1UP', text: 'Die Unpopular Opinion der Woche. Eine Meinung, mit der man sich eher keine Freunde macht.' },
+    { name: 'Letzte Runde', text: 'Eure Fragen aus den Instagram-Stories, beantwortet zum Schluss jeder Folge.' },
   ],
 
   // Häufige Fragen ganz unten. Antworten dürfen Links enthalten (<a href="...">...</a>).

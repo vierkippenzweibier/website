@@ -7,7 +7,7 @@ import config from './site.config.mjs';
 const OUT = 'dist';
 // Versionsnummer aus dem Dateiinhalt, damit Browser neue CSS/JS sofort laden.
 const ver = async (f) => createHash('sha1').update(await readFile(f)).digest('hex').slice(0, 8);
-const V = { css: await ver('src/style.css'), js: await ver('src/player.js'), cd: await ver('src/countdown.js') };
+const V = { css: await ver('src/style.css'), js: await ver('src/player.js'), cd: await ver('src/countdown.js'), mo: await ver('src/motion.js') };
 const exists = (p) => access(p).then(() => true, () => false);
 
 // ---------- Feed lesen ----------
@@ -105,6 +105,7 @@ ${config.ogImage ? `<meta property="og:image" content="https://${config.domain}/
 <meta property="og:locale" content="de_DE">
 <link rel="alternate" type="application/rss+xml" title="VIER KIPPEN ZWEI BIER" href="${config.feed}">
 <link rel="stylesheet" href="/style.css?v=${V.css}">
+<script>document.documentElement.classList.add('js')</script>
 </head>
 <body>
 <div class="topbar" role="status"><div class="wrap"><span data-countdown>${esc(config.release)}</span></div></div>
@@ -119,12 +120,17 @@ ${stage ? '<div class="buehne">' : ''}<header class="head wrap">
 </header>
 ${stage ? `${stage}\n</div>` : ''}
 ${body}
-<footer class="wrap"><div class="foot">
-<span>${esc(config.footer)}</span>
-<nav class="foot-soc" aria-label="Social Media"><a href="${config.links.instagram}">Instagram</a><a href="${config.links.tiktok}">TikTok</a></nav>
-<nav aria-label="Rechtliches"><a href="/impressum/">Impressum</a><a href="/datenschutz/">Datenschutz</a></nav>
-</div></footer>
+<footer class="site-foot"><div class="wrap">
+<div class="foot">
+<span class="foot-say">${esc(config.footer)}</span>
+<nav class="foot-soc" aria-label="Hören und folgen"><a href="${config.links.spotify}">Spotify</a><a href="${config.links.apple}">Apple Podcasts</a><a href="${config.links.instagram}">Instagram</a><a href="${config.links.tiktok}">TikTok</a></nav>
+<nav class="foot-legal" aria-label="Rechtliches"><a href="/impressum/">Impressum</a><a href="/datenschutz/">Datenschutz</a></nav>
+</div>
+</div>
+<div class="wordmark" aria-hidden="true"><span>VIER KIPPEN ZWEI BIER</span></div>
+</footer>
 <script src="/countdown.js?v=${V.cd}" defer></script>
+<script src="/motion.js?v=${V.mo}" defer></script>
 </body>
 </html>
 `;
@@ -209,7 +215,7 @@ function home(eps) {
 
   // Alles, was der Player beim Wechsel der Folge oben anzeigt.
   const data = list.map((e, i) => ({
-    audio: e.audio, duration: e.duration, label: `#${e.no} ${e.hook}`,
+    audio: e.audio, duration: e.duration, no: e.no, label: `#${e.no} ${e.hook}`,
     eyebrow: eyebrow(e, i), hook: e.hook, subtitle: e.subtitle,
     cover: e.coverFile ? `/${e.coverFile}` : '', coverAlt: `Cover von Folge #${e.no}`,
     spotify: e.spotify || L.spotify,
@@ -234,23 +240,26 @@ function home(eps) {
 </section>`,
     body: `<main>
 
-<section id="folge" class="wrap"><div class="section">
+<div class="ticker" aria-hidden="true"><div class="ticker-in">${Array(2).fill(`<span>${(config.ticker || []).map((t) => `${esc(t)}<i>/</i>`).join('')}</span>`).join('')}</div></div>
+
+<section id="folge" class="nf"><div class="wrap">
+<p class="kicker" data-reveal><span data-eyebrow>${esc(eyebrow(latest, 0))}</span></p>
 <div class="ep-head${cover ? ' has-cover' : ''}">
 <div class="ep-text">
-<p class="eyebrow" data-eyebrow>${esc(eyebrow(latest, 0))}</p>
-<h2 class="h h-xl" data-hook>${esc(latest.hook)}</h2>
-<p class="lede" data-lede${latest.subtitle ? '' : ' hidden'}>${esc(latest.subtitle)}</p>
-<p class="sp-link"><a data-spotify href="${esc(latest.spotify || L.spotify)}">Auf Spotify hören</a></p>
+<span class="nf-no" aria-hidden="true" data-no>#${esc(latest.no)}</span>
+<h2 class="nf-h" data-hook data-reveal>${esc(latest.hook)}</h2>
+<p class="lede" data-lede data-reveal${latest.subtitle ? '' : ' hidden'}>${esc(latest.subtitle)}</p>
+<p class="sp-link" data-reveal><a data-spotify href="${esc(latest.spotify || L.spotify)}">Auf Spotify hören</a></p>
 </div>
-<img class="cover" data-cover src="${cover ? `/${cover}` : ''}" alt="Cover von Folge #${esc(latest.no)}" width="600" height="600" loading="lazy"${cover ? '' : ' hidden'}>
+<div class="cover-wrap" data-reveal><img class="cover" data-cover src="${cover ? `/${cover}` : ''}" alt="Cover von Folge #${esc(latest.no)}" width="600" height="600" loading="lazy"${cover ? '' : ' hidden'}></div>
 </div>
-<div class="player" data-player>
+<div class="player" data-player data-reveal>
 <button class="play" type="button" aria-label="Abspielen">
 <svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4l13 8-13 8z" fill="currentColor"/></svg>
 <svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h4v16H6zM14 4h4v16h-4z" fill="currentColor"/></svg>
 </button>
 <div class="track">
-<div class="now">#${esc(latest.no)} ${esc(latest.hook)}</div>
+<div class="now"><span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="now-t">#${esc(latest.no)} ${esc(latest.hook)}</span></div>
 <input class="bar" type="range" min="0" max="100" step="0.1" value="0" aria-label="Position in der Folge">
 <div class="times"><span data-cur>0:00</span><span data-dur>${clock(latest.duration)}</span></div>
 </div>
@@ -264,43 +273,63 @@ ${chapterItems(latest)}
 </details>
 </div></section>
 
-<section id="folgen" class="wrap"><div class="section">
-<details class="acc">
-<summary><h2 class="h h-m">LETZTE FOLGEN</h2><span class="acc-i" aria-hidden="true"></span></summary>
-<ul class="episodes">
-${list.map((e, i) => `<li data-i="${i}"${i === 0 ? ' class="is-current" hidden' : ''}>
-<span class="no">#${esc(e.no)}</span>
-<div class="txt"><div class="eh">${esc(e.hook)}</div>${e.things ? `<div class="et">${esc(e.things)}</div>` : ''}<div class="et">${i === 0 ? '<span class="new">Neue Folge</span> · ' : ''}${date(e.date)} · ${mins(e.duration)}</div></div>
-<button class="go" type="button" data-play="${i}">Hören</button>
-</li>`).join('\n')}
+<section class="stats dark" aria-label="Zahlen"><div class="wrap">
+<p class="kicker kicker-c" data-reveal>Bis hierhin</p>
+<h2 class="stats-h" data-reveal>Jede Woche. Seit Folge eins.</h2>
+<ul class="stats-l">
+${[
+  [eps.length, 'Folgen'],
+  [Math.round(eps.reduce((s, e) => s + e.duration, 0) / 3600), 'Stunden am Tresen'],
+  [4, 'Kippen pro Folge'],
+  [2, 'Bier pro Folge'],
+].map(([n, t], i) => `<li data-reveal style="--d:${i}"><b data-count="${n}">${n}</b><span>${esc(t)}</span></li>`).join('\n')}
 </ul>
-<p class="more"><a href="https://vierkippenzweibier.podigee.io/episodes">Alle ${eps.length} Folgen</a></p>
-</details>
 </div></section>
 
-<section id="wir" class="wrap"><div class="section">
-<h2 class="h h-m">ÜBER UNS</h2>
-${(config.about || []).length ? `<div class="about">${config.about.map((t) => `<p>${esc(t)}</p>`).join('\n')}</div>` : ''}
+<section id="folgen" class="tl"><div class="wrap">
+<h2 class="giant" data-reveal>Letzte Folgen</h2>
+<div class="tl-head" aria-hidden="true"><span>#</span><span>Folge</span><span>Datum</span><span>Länge</span><span></span></div>
+<ul class="episodes">
+${list.map((e, i) => `<li data-i="${i}"${i === 0 ? ' class="is-current" hidden' : ''} data-reveal style="--d:${i % 8}">
+<span class="no">#${esc(e.no)}</span>
+${e.coverFile ? `<img class="th" src="/${esc(e.coverFile)}" alt="" width="56" height="56" loading="lazy">` : '<span class="th"></span>'}
+<div class="txt"><div class="eh">${esc(e.hook)}</div>${e.things ? `<div class="et">${esc(e.things)}</div>` : ''}</div>
+<span class="dt"><span class="no-m">#${esc(e.no)} · </span>${i === 0 ? '<span class="new">Neu</span> ' : ''}${date(e.date)}</span>
+<span class="ln">${mins(e.duration)}</span>
+<button class="go" type="button" data-play="${i}" aria-label="Folge #${esc(e.no)} hören"><span>Hören</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4l13 8-13 8z" fill="currentColor"/></svg></button>
+</li>`).join('\n')}
+</ul>
+<p class="more" data-reveal><a class="pill" href="https://vierkippenzweibier.podigee.io/episodes">Alle ${eps.length} Folgen <span aria-hidden="true">→</span></a></p>
+</div></section>
+
+<section id="wir" class="wir dark"><div class="wrap">
+<div class="wir-grid">
+<h2 class="giant giant-side" data-reveal>Über <br>uns</h2>
+${(config.about || []).length ? `<div class="about">${config.about.map((t, i) => `<p${i === 0 ? ' class="about-lead"' : ''} data-reveal>${esc(t)}</p>`).join('\n')}</div>` : ''}
+</div>
+${(config.rubriken || []).length ? `<ol class="rubs">
+${config.rubriken.map((r, i) => `<li data-reveal style="--d:${i}"><span class="rub-no" aria-hidden="true">${String(i + 1).padStart(2, '0')}</span><h3>${esc(r.name)}</h3><p>${esc(r.text)}</p></li>`).join('\n')}
+</ol>` : ''}
 ${config.hosts.length ? `<div class="hosts">
 ${config.hosts.map((h) => `<div><div class="h h-m">${esc(h.name)}</div><p>${esc(h.text)}</p></div>`).join('\n')}
 </div>` : ''}
 ${(config.press || []).map((a) => `<article class="press">
-<figure class="press-img"><img src="/${esc(a.image)}" alt="${esc(a.imageAlt)}" width="970" height="546" loading="lazy"><figcaption>Foto: ${esc(a.photographer)} / ${esc(a.outlet)}</figcaption></figure>
-<div class="press-txt">
-<p class="eyebrow">Presse · ${esc(a.outlet)} · ${esc(a.date)}</p>
-<h3 class="h press-h"><a href="${esc(a.url)}">${esc(a.title)}</a></h3>
+<figure class="press-img" data-reveal><img src="/${esc(a.image)}" alt="${esc(a.imageAlt)}" width="970" height="546" loading="lazy"><figcaption>Foto: ${esc(a.photographer)} / ${esc(a.outlet)}</figcaption></figure>
+<div class="press-txt" data-reveal>
+<p class="press-tag">Presse · ${esc(a.outlet)} · ${esc(a.date)}</p>
+<h3 class="press-h"><a href="${esc(a.url)}">${esc(a.title)}</a></h3>
 <p>${esc(a.intro)}</p>
 <p class="press-by">Text: ${a.authorUrl ? `<a href="${esc(a.authorUrl)}">${esc(a.author)}</a>` : esc(a.author)} · ${esc(a.outletLong)}</p>
-<p class="press-go"><a href="${esc(a.url)}">Artikel lesen auf bnn.de</a></p>
+<p class="press-go"><a class="pill pill-light" href="${esc(a.url)}">Artikel lesen auf bnn.de <span aria-hidden="true">→</span></a></p>
 </div>
 </article>`).join('\n')}
 </div></section>
 ${(config.faq || []).length ? `
-<section id="faq" class="wrap"><div class="section">
-<h2 class="h h-m">HÄUFIGE FRAGEN</h2>
+<section id="faq" class="faqs"><div class="wrap">
+<h2 class="giant" data-reveal>Fragen?</h2>
 <div class="faq">
-${config.faq.map((f) => `<details class="acc faq-item">
-<summary><h3 class="faq-q">${esc(f.q)}</h3><span class="acc-i" aria-hidden="true"></span></summary>
+${config.faq.map((f, i) => `<details class="acc faq-item" data-reveal style="--d:${i}">
+<summary><span class="faq-n">${String(i + 1).padStart(2, '0')}</span><h3 class="faq-q">${esc(f.q)}</h3><span class="acc-i" aria-hidden="true"></span></summary>
 <div class="faq-a"><p>${f.a}</p></div>
 </details>`).join('\n')}
 </div>
@@ -327,6 +356,7 @@ await mkdir(`${OUT}/fonts`, { recursive: true });
 await cp('src/style.css', `${OUT}/style.css`);
 await cp('src/player.js', `${OUT}/player.js`);
 await cp('src/countdown.js', `${OUT}/countdown.js`);
+await cp('src/motion.js', `${OUT}/motion.js`);
 if (await exists('assets')) await cp('assets', `${OUT}/assets`, { recursive: true });
 hasPhoto = await exists(config.photo);
 // Kleinere Fassungen (venus-800.jpg, venus-1280.jpg) werden genutzt, wenn sie daneben liegen.

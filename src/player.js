@@ -10,7 +10,7 @@
   var bar = root.querySelector('.bar');
   var cur = root.querySelector('[data-cur]');
   var dur = root.querySelector('[data-dur]');
-  var now = root.querySelector('.now');
+  var now = root.querySelector('.now-t');
   var speedBtn = root.querySelector('.speed');
   var speeds = [1, 1.25, 1.5, 2];
   var current = 0;
@@ -19,7 +19,7 @@
   // Kopfbereich (Titel, Text, Cover, Kapitel) auf die gewählte Folge umstellen.
   var $ = function (sel) { return document.querySelector(sel); };
   var eyebrowEl = $('[data-eyebrow]'), hookEl = $('[data-hook]'), ledeEl = $('[data-lede]');
-  var coverEl = $('[data-cover]'), chaptersEl = $('[data-chapters]');
+  var coverEl = $('[data-cover]'), chaptersEl = $('[data-chapters]'), noEl = $('[data-no]');
   var spEl = $('[data-spotify]');
   var chWrap = $('[data-chapters-wrap]'), chCount = $('[data-ch-count]');
   // Am Handy sind die Kapitel zugeklappt, am Desktop immer offen.
@@ -32,6 +32,7 @@
   function showEpisode(ep) {
     if (eyebrowEl) eyebrowEl.textContent = ep.eyebrow;
     if (hookEl) hookEl.textContent = ep.hook;
+    if (noEl && ep.no) noEl.textContent = '#' + ep.no;
     if (ledeEl) { ledeEl.textContent = ep.subtitle || ''; ledeEl.hidden = !ep.subtitle; }
     if (spEl && ep.spotify) spEl.href = ep.spotify;
     if (coverEl) {
