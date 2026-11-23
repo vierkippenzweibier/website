@@ -244,6 +244,10 @@ a:hover { color: var(--accent-ink); }
 .episodes { margin: 0; padding: 0; list-style: none; }
 .episodes li { position: relative; padding: 14px 16px; border-bottom: 1px solid rgba(18, 17, 16, .16); transition: background .25s, color .25s; }
 .episodes li[hidden] { display: none; }
+/* Liste startet als Ganzes, die Zeilen gleiten kurz nacheinander rein (ein Auslöser, kein Einzel-Ploppen) */
+.js .episodes[data-reveal] { opacity: 1; transform: none; transition: none; }
+.js .episodes li { opacity: 0; transform: translate3d(0, 14px, 0); }
+.js .episodes.in li { opacity: 1; transform: none; transition: opacity .5s ease-out, transform .5s cubic-bezier(.2, .7, .2, 1), background .25s, color .25s; transition-delay: calc(var(--d, 0) * 45ms), calc(var(--d, 0) * 45ms), 0s, 0s; }
 .episodes li:hover { background: var(--ink); color: var(--light); }
 .episodes .no { font-family: var(--display); font-size: 26px; color: var(--accent-ink); }
 .episodes li:hover .no { color: var(--accent); }
@@ -395,6 +399,6 @@ section[id] { scroll-margin-top: 0; }
 /* Wer weniger Bewegung möchte, bekommt keine */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
-  .js [data-reveal] { opacity: 1; transform: none; }
+  .js [data-reveal], .js .episodes li { opacity: 1; transform: none; }
   .wordmark span { transform: translateY(6%); }
 }

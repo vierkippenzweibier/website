@@ -290,8 +290,8 @@ ${[
 <section id="folgen" class="tl"><div class="wrap">
 <h2 class="giant" data-reveal>Letzte Folgen</h2>
 <div class="tl-head" aria-hidden="true"><span>#</span><span>Folge</span><span>Datum</span><span>Länge</span><span></span></div>
-<ul class="episodes">
-${list.map((e, i) => `<li data-i="${i}"${i === 0 ? ' class="is-current" hidden' : ''} data-reveal style="--d:${i % 8}">
+<ul class="episodes" data-reveal>
+${list.map((e, i) => `<li data-i="${i}"${i === 0 ? ' class="is-current" hidden' : ''} style="--d:${i}">
 <span class="no">#${esc(e.no)}</span>
 ${e.coverFile ? `<img class="th" src="/${esc(e.coverFile)}" alt="" width="56" height="56" loading="lazy">` : '<span class="th"></span>'}
 <div class="txt"><div class="eh">${esc(e.hook)}</div>${e.things ? `<div class="et">${esc(e.things)}</div>` : ''}</div>
