@@ -224,9 +224,12 @@ a:hover { color: var(--accent-ink); }
 .stats { padding: var(--sec) 0; text-align: center; }
 .stats-h { margin: 0 auto 64px; max-width: 900px; font-family: var(--display); font-weight: 400; font-size: clamp(36px, 5vw, 64px); line-height: 1; text-transform: uppercase; }
 .stats-l { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin: 0; padding: 0; list-style: none; }
-.stats-l li { display: flex; flex-direction: column; align-items: center; gap: 10px; }
-.stats-l b { font-family: var(--display); font-weight: 400; font-size: clamp(80px, 11vw, 168px); line-height: .9; font-variant-numeric: tabular-nums; background: var(--hot); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.stats-l span { font-size: 14px; letter-spacing: .16em; text-transform: uppercase; color: rgba(244, 248, 249, .7); }
+.stats-l li { display: flex; flex-direction: column; align-items: center; gap: 10px; min-width: 0; }
+.stats-l .pre { font-size: 15px; font-weight: 700; letter-spacing: .12em; color: var(--accent); margin-bottom: -4px; }
+.stats-l b { font-family: var(--display); font-weight: 400; font-size: clamp(64px, 7.6vw, 124px); line-height: .9; font-variant-numeric: tabular-nums; background: var(--hot); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.stats-l .lbl { font-size: 14px; letter-spacing: .16em; text-transform: uppercase; color: rgba(244, 248, 249, .7); }
+
+@media (max-width: 1000px) { .stats-l { grid-template-columns: 1fr 1fr; row-gap: 48px; } .stats-l b { font-size: clamp(64px, 12vw, 124px); } }
 
 /* ---------- Letzte Folgen als Tracklist ---------- */
 .tl { padding: var(--sec) 0; }
@@ -367,8 +370,9 @@ section[id] { scroll-margin-top: 0; }
   .chapters .ct { font-size: 17px; }
   .stats-h { margin-bottom: 40px; }
   .stats-l { grid-template-columns: 1fr 1fr; gap: 36px 12px; }
-  .stats-l b { font-size: 25vw; }
-  .stats-l span { font-size: 12px; letter-spacing: .12em; }
+  .stats-l b { font-size: 15vw; }
+  .stats-l .lbl { font-size: 12px; letter-spacing: .1em; }
+  .stats-l .pre { font-size: 12px; }
   .wir-grid { grid-template-columns: 1fr; gap: 28px; }
   .giant-side { position: static; font-size: 18vw; }
   .giant-side br { display: none; }

@@ -7,13 +7,14 @@
 
   function countUp(el) {
     var target = Number(el.dataset.count) || 0;
-    if (still || target < 5) { el.textContent = target; return; }
-    var t0 = null, dur = 1400;
+    var fmt = function (n) { return n.toLocaleString('de-DE'); };
+    if (still || target < 5) { el.textContent = fmt(target); return; }
+    var t0 = null, dur = 1800;
     function step(t) {
       if (!t0) t0 = t;
       var p = Math.min(1, (t - t0) / dur);
       var e = 1 - Math.pow(1 - p, 3); // bremst zum Ende hin ab
-      el.textContent = Math.round(target * e);
+      el.textContent = fmt(Math.round(target * e));
       if (p < 1) requestAnimationFrame(step);
     }
     el.textContent = '0';

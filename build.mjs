@@ -278,11 +278,12 @@ ${chapterItems(latest)}
 <h2 class="stats-h" data-reveal>Jede Woche. Seit Folge eins.</h2>
 <ul class="stats-l">
 ${[
-  [eps.length, 'Folgen'],
-  [Math.round(eps.reduce((s, e) => s + e.duration, 0) / 3600), 'Stunden am Tresen'],
-  [4, 'Kippen pro Folge'],
-  [2, 'Bier pro Folge'],
-].map(([n, t], i) => `<li data-reveal style="--d:${i}"><b data-count="${n}">${n}</b><span>${esc(t)}</span></li>`).join('\n')}
+  // Alles aus dem Feed. Kippen: 4 pro Folge und Kopf, Bier: 2 pro Folge und Kopf, zu zweit. "mind.", weil wir manchmal überziehen.
+  [eps.length, 'Folgen', ''],
+  [Math.round(eps.reduce((s, e) => s + e.duration, 0) / 60), 'Minuten am Tresen', ''],
+  [eps.length * 4 * 2, 'Kippen geraucht', 'mind.'],
+  [eps.length * 2 * 2, 'Bier getrunken', 'mind.'],
+].map(([n, t, pre], i) => `<li data-reveal style="--d:${i}"><span class="pre"${pre ? '' : ' aria-hidden="true"'}>${pre || '&nbsp;'}</span><b data-count="${n}">${n.toLocaleString('de-DE')}</b><span class="lbl">${esc(t)}</span></li>`).join('\n')}
 </ul>
 </div></section>
 
