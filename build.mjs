@@ -466,7 +466,7 @@ ${e.chapters.map((c) => `<li><button type="button" data-seek="${c.start}"><span 
 </ol>
 </details>` : ''}
 ${notes ? `<div class="notes-wrap">
-<h2 class="giant notes-h" data-reveal>Darum geht's</h2>
+<h2 class="notes-h" aria-label="Darum geht's"><span class="nh-a">Darum</span> <span class="nh-b">geht's</span></h2>
 <div class="notes-grid">
 <aside class="ep-facts" data-reveal aria-label="Zur Folge">
 <dl>

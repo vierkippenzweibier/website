@@ -437,7 +437,17 @@ section[id] { scroll-margin-top: 0; }
 .ep-play { padding-top: clamp(56px, 6vw, 88px); }
 .ep-play .player { margin-top: 0; }
 .notes-wrap { margin-top: clamp(72px, 8vw, 120px); padding-top: clamp(40px, 5vw, 64px); border-top: 2px solid var(--ink); }
-.notes-h { margin-bottom: clamp(32px, 4vw, 56px); }
+.notes-wrap { container-type: inline-size; }
+/* Headline läuft exakt über die volle Breite, eine Zeile auf jedem Gerät: massiv + Kontur */
+.notes-h { display: flex; justify-content: space-between; margin: 0 0 clamp(32px, 4vw, 56px); font-family: var(--display); font-weight: 400; text-transform: uppercase; font-size: 19.4cqi; line-height: .82; letter-spacing: -.01em; white-space: nowrap; }
+.nh-b { color: transparent; -webkit-text-stroke: max(2px, .35cqi) var(--ink); }
+@supports (animation-timeline: view()) {
+  .nh-a { animation: nh-l linear both; animation-timeline: view(); animation-range: entry 0% cover 45%; }
+  .nh-b { animation: nh-r linear both; animation-timeline: view(); animation-range: entry 0% cover 45%; }
+  @keyframes nh-l { from { transform: translateX(-12%); opacity: .2; } }
+  @keyframes nh-r { from { transform: translateX(12%); opacity: .2; } }
+}
+@media (prefers-reduced-motion: reduce) { .nh-a, .nh-b { animation: none !important; } }
 .notes-grid { display: grid; grid-template-columns: minmax(220px, 4fr) minmax(0, 8fr); gap: clamp(32px, 5vw, 80px); align-items: start; }
 /* Info-Karte zur Folge: wandert am Desktop beim Lesen mit */
 .ep-facts { position: sticky; top: 32px; padding: 26px 26px 22px; background: var(--ink); color: var(--light); border-radius: 4px; box-shadow: 0 30px 60px -34px rgba(18, 17, 16, .6); }
