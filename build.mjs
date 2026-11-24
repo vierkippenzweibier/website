@@ -465,9 +465,22 @@ ${e.chapters.length ? `<details class="acc ch-acc" open data-chapters-wrap>
 ${e.chapters.map((c) => `<li><button type="button" data-seek="${c.start}"><span class="t">${clock(c.start)}</span><span class="ct">${esc(c.title)}</span></button></li>`).join('\n')}
 </ol>
 </details>` : ''}
-${notes ? `<div class="notes-grid">
-<h2 class="giant giant-side" data-reveal>Worum's <br>geht</h2>
-<div class="notes" data-reveal>${notes}</div>
+${notes ? `<div class="notes-wrap">
+<h2 class="giant notes-h" data-reveal>Darum geht's</h2>
+<div class="notes-grid">
+<aside class="ep-facts" data-reveal aria-label="Zur Folge">
+<dl>
+<div><dt>Folge</dt><dd class="ep-facts-no">#${esc(e.no)}</dd></div>
+<div><dt>Erschienen</dt><dd>${date(e.date)}</dd></div>
+<div><dt>Länge</dt><dd>${mins(e.duration)}</dd></div>
+${e.chapters.length ? `<div><dt>Kapitel</dt><dd><a href="#folge">${e.chapters.length}</a></dd></div>` : ''}
+<div><dt>Am Tresen</dt><dd>${esc((config.people || ['Till', 'Fritz']).map((n) => n.split(' ')[0]).join(' & '))}</dd></div>
+<div><dt>Aufgenommen</dt><dd>Venus Bar, Karlsruhe</dd></div>
+</dl>
+<p class="ep-facts-go"><a class="pill" href="${esc(e.spotify || L.spotify)}">Spotify</a><a class="pill" href="${esc(L.apple)}">Apple</a></p>
+</aside>
+<div class="notes" data-reveal style="--d:1">${notes}</div>
+</div>
 </div>` : ''}
 </div></section>
 <nav class="pn dark" aria-label="Weitere Folgen"><div class="wrap">
