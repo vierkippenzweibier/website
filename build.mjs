@@ -440,24 +440,24 @@ function episodePage(e, i, eps) {
     description: desc,
     path: slug(e),
     ogImage: cover ? e.coverFile : '',
-    stage: `<section class="eh-hero"><div class="wrap eh-grid">
-<div class="eh-text">
-<nav class="crumbs" aria-label="Brotkrumen"><a href="/folgen/">Alle Folgen</a><span aria-hidden="true">/</span><span>#${esc(e.no)}</span></nav>
-<p class="kicker">Folge #${esc(e.no)} · ${date(e.date)} · ${mins(e.duration)}</p>
-<span class="eh-no" aria-hidden="true">#${esc(e.no)}</span>
-<h1 class="eh-h">${esc(e.hook)}</h1>
-${e.things ? `<p class="eh-things">${esc(e.things)}</p>` : ''}
-<div class="eh-cta">
-<button class="eh-play" type="button" data-play="0"><span class="eh-play-i">${playIcon}</span><span>Jetzt reinhören</span></button>
-<a class="pill pill-light" href="${esc(e.spotify || L.spotify)}">Spotify</a>
-<a class="pill pill-light" href="${esc(L.apple)}">Apple Podcasts</a>
-</div>
-</div>
-${cover ? `<div class="cover-wrap eh-cover"><img class="cover" src="${cover}" alt="Cover von Folge #${esc(e.no)}" width="600" height="600" fetchpriority="high"></div>` : ''}
-</div></section>`,
+    stage: tick.length ? tickerOf(tick) : '',
     body: `<main>
-${tick.length ? tickerOf(tick) : ''}
-<section id="folge" class="nf ep-play"><div class="wrap">
+<section id="folge" class="nf ep-top"><div class="wrap">
+<nav class="crumbs" aria-label="Brotkrumen"><a href="/folgen/">Alle Folgen</a><span aria-hidden="true">/</span><span>#${esc(e.no)}</span></nav>
+<p class="kicker">${i === 0 ? 'Neue Folge' : 'Folge'} · #${esc(e.no)} · ${date(e.date)} · ${mins(e.duration)}</p>
+<div class="ep-head${cover ? ' has-cover' : ''}">
+<div class="ep-text">
+<span class="nf-no" aria-hidden="true">#${esc(e.no)}</span>
+<h1 class="nf-h eh-in">${esc(e.hook)}</h1>
+${e.things ? `<p class="lede eh-in">${esc(e.things)}</p>` : ''}
+<div class="eh-cta eh-in">
+<button class="eh-play" type="button" data-play="0"><span class="eh-play-i">${playIcon}</span><span>Jetzt reinhören</span></button>
+<a class="pill" href="${esc(e.spotify || L.spotify)}">Spotify</a>
+<a class="pill" href="${esc(L.apple)}">Apple Podcasts</a>
+</div>
+</div>
+${cover ? `<div class="cover-wrap eh-in"><img class="cover" src="${cover}" alt="Cover von Folge #${esc(e.no)}" width="600" height="600" fetchpriority="high"></div>` : ''}
+</div>
 ${playerBlock(e)}
 ${e.chapters.length ? `<details class="acc ch-acc" open data-chapters-wrap>
 <summary><h2 class="ch-h">Kapitel <span data-ch-count>${e.chapters.length}</span></h2><span class="acc-i" aria-hidden="true"></span></summary>

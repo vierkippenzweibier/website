@@ -442,6 +442,20 @@ section[id] { scroll-margin-top: 0; }
 .notes a { color: var(--accent-ink); }
 .notes strong, .notes b { font-weight: 700; }
 
+/* Folgenseite: helle Bühne wie „Neue Folge“ auf der Startseite */
+.ep-top { padding-top: clamp(48px, 6vw, 88px); }
+.ep-top .crumbs { color: var(--muted); }
+.ep-top .crumbs a { color: var(--ink); border-color: rgba(18, 17, 16, .35); }
+.ep-top .crumbs a:hover { color: var(--accent-ink); border-color: var(--accent-ink); }
+.ep-top h1.nf-h { font-size: clamp(58px, 9vw, 140px); text-wrap: balance; }
+.ep-top .eh-cta { margin-top: 30px; }
+.ep-top .eh-play-i { color: var(--light); }
+.ep-top .player { margin-top: 56px; }
+.js .eh-in { animation: rise-in .9s cubic-bezier(.2, .7, .2, 1) both; }
+.js .ep-text .eh-in:nth-of-type(2) { animation-delay: .08s; }
+.js .eh-cta.eh-in { animation-delay: .16s; } .js .cover-wrap.eh-in { animation-delay: .1s; }
+.buehne > .ticker { border-top: 0; }
+
 /* Vorherige / nächste Folge */
 .pn { padding: clamp(64px, 8vw, 112px) 0; }
 .pn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; background: rgba(244, 248, 249, .18); border: 2px solid rgba(244, 248, 249, .18); }
@@ -481,6 +495,8 @@ a.pn-card:hover .pn-no { -webkit-text-stroke-color: rgba(18, 17, 16, .35); trans
   .notes-grid .giant-side br { display: none; }
 }
 @media (max-width: 760px) {
+  .ep-top h1.nf-h { font-size: 15vw; }
+  .ep-top .player { margin-top: 32px; }
   .eh-hero { padding-top: 32px; }
   .crumbs { margin-bottom: 20px; font-size: 12px; }
   .eh-h { font-size: 15vw; }
@@ -495,4 +511,4 @@ a.pn-card:hover .pn-no { -webkit-text-stroke-color: rgba(18, 17, 16, .35); trans
   .pn-h { font-size: 34px; }
   .arc-sub { font-size: 12px; line-height: 2; }
 }
-@media (prefers-reduced-motion: reduce) { .js .eh-h, .js .eh-things, .js .eh-cta, .js .eh-cover, .js .arc-h { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .js .eh-in, .js .eh-h, .js .eh-things, .js .eh-cta, .js .eh-cover, .js .arc-h { animation: none; } }
