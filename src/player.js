@@ -119,7 +119,8 @@
   document.querySelectorAll('[data-play]').forEach(function (b) {
     b.addEventListener('click', function () {
       select(Number(b.dataset.play), true);
-      document.getElementById('folge').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      var target = document.getElementById('folge');
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
   });
   // Kapitel springen in der Folge, die gerade oben steht.

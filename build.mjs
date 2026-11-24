@@ -57,7 +57,9 @@ function parse(xml) {
     const chapters = [...it.matchAll(/<psc:chapter\s([^>]*?)\/?>/g)].map((m) => ({
       start: toSeconds((m[1].match(/start="([^"]*)"/) || [])[1]?.split('.')[0]),
       title: decode((m[1].match(/title="([^"]*)"/) || [])[1] || ''),
-    })).filter((c) => c.title);
+    })).filter((c) => c.title && !/^Kapitel\s*\d+$/i.test(c.title))
+      .sort((a, b) => a.start - b.start)
+      .filter((c, k, arr) => k === 0 || c.start !== arr[k - 1].start || c.title !== arr[k - 1].title);
     return {
       title,
       ...t,
@@ -68,6 +70,7 @@ function parse(xml) {
       link: tag(it, 'link'),
       image: attr(it, 'itunes:image', 'href'),
       chapters,
+      notes: (it.match(/<content:encoded>([\s\S]*?)<\/content:encoded>/) || [])[1] || (it.match(/<description>([\s\S]*?)<\/description>/) || [])[1] || '',
     };
   }).filter((e) => e.audio).sort((a, b) => b.date - a.date);
 }
@@ -78,7 +81,7 @@ const date = (d) => d.toLocaleDateString('de-DE', { day: '2-digit', month: '2-di
 const clock = (s) => [Math.floor(s / 3600), Math.floor(s % 3600 / 60), s % 60].map((n) => String(n).padStart(2, '0')).join(':');
 const mins = (s) => `${Math.round(s / 60)} Min`;
 
-function layout({ title, description, body, path = '', stage = '' }) {
+function layout({ title, description, body, path = '', stage = '', ogImage = '' }) {
   const url = `https://${config.domain}/${path}`;
   return `<!doctype html>
 <html lang="de">
@@ -92,7 +95,8 @@ function layout({ title, description, body, path = '', stage = '' }) {
 <meta property="og:description" content="${esc(description)}">
 <meta property="og:url" content="${url}">
 <meta property="og:type" content="website">
-${config.ogImage ? `<meta property="og:image" content="https://${config.domain}/${config.ogImage}">
+${ogImage ? `<meta property="og:image" content="https://${config.domain}/${ogImage}">
+<meta name="twitter:card" content="summary">` : config.ogImage ? `<meta property="og:image" content="https://${config.domain}/${config.ogImage}">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="VIER KIPPEN ZWEI BIER – Podcast-Cover">
@@ -294,13 +298,13 @@ ${[
 ${list.map((e, i) => `<li data-i="${i}"${i === 0 ? ' class="is-current" hidden' : ''} style="--d:${i}">
 <span class="no">#${esc(e.no)}</span>
 ${e.coverFile ? `<img class="th" src="/${esc(e.coverFile)}" alt="" width="56" height="56" loading="lazy">` : '<span class="th"></span>'}
-<div class="txt"><div class="eh">${esc(e.hook)}</div>${e.things ? `<div class="et">${esc(e.things)}</div>` : ''}</div>
+<div class="txt"><a class="eh eh-link" href="/${slug(e)}">${esc(e.hook)}</a>${e.things ? `<div class="et">${esc(e.things)}</div>` : ''}</div>
 <span class="dt"><span class="no-m">#${esc(e.no)} · </span>${i === 0 ? '<span class="new">Neu</span> ' : ''}${date(e.date)}</span>
 <span class="ln">${mins(e.duration)}</span>
 <button class="go" type="button" data-play="${i}" aria-label="Folge #${esc(e.no)} hören"><span>Hören</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4l13 8-13 8z" fill="currentColor"/></svg></button>
 </li>`).join('\n')}
 </ul>
-<p class="more" data-reveal><a class="pill" href="https://vierkippenzweibier.podigee.io/episodes">Alle ${eps.length} Folgen <span aria-hidden="true">→</span></a></p>
+<p class="more" data-reveal><a class="pill" href="/folgen/">Alle ${eps.length} Folgen <span aria-hidden="true">→</span></a></p>
 </div></section>
 
 <section id="wir" class="wir dark"><div class="wrap">
@@ -346,6 +350,167 @@ ${config.faq.map((f, i) => `<details class="acc faq-item" data-reveal style="--d
   });
 }
 
+// ---------- Folgen-Unterseiten ----------
+// Shownotes aus dem Feed aufräumen: nur einfache Tags, Zeitstempel-Listen raus (stehen schon als Kapitel da).
+function cleanNotes(raw = '') {
+  if (!raw) return '';
+  let h = raw.replace(/<!\[CDATA\[|\]\]>/g, '');
+  if (!/<\w/.test(h)) h = decode(h); // manche Feeds liefern das HTML maskiert (&lt;p&gt;)
+  const paras = h.split(/<\/p>\s*/i).map((p) => p.replace(/<p[^>]*>/gi, '')).filter((p) => p.trim());
+  const out = [];
+  for (const p of (paras.length ? paras : [h])) {
+    const lines = p.split(/<br\s*\/?>|\n/i).map((l) => l.trim()).filter(Boolean);
+    const kept = lines.filter((l) => {
+      const txt = l.replace(/<[^>]+>/g, '').trim();
+      return txt && !/^\d{1,2}:\d{2}(:\d{2})?\s/.test(txt) && !/^Kapitel(übersicht)?:?$/i.test(txt);
+    });
+    if (!kept.length) continue;
+    const safe = kept.join('<br>')
+      .replace(/<(?!\/?(strong|b|em|i|br|a)\b)[^>]*>/gi, '')
+      .replace(/<a\s[^>]*?href="(https?:\/\/[^"]+)"[^>]*>/gi, '<a href="$1" rel="noopener">')
+      .replace(/<a(?![^>]*href)[^>]*>/gi, '');
+    out.push(`<p>${safe}</p>`);
+  }
+  return out.join('\n');
+}
+const plain = (h = '') => decode(h.replace(/<br\s*\/?>/gi, ' ').replace(/<[^>]+>/g, ' ')).replace(/\s+/g, ' ').trim();
+const slug = (e) => `folge/${e.no}/`;
+const isoDur = (s) => `PT${Math.floor(s / 3600) ? `${Math.floor(s / 3600)}H` : ''}${Math.floor(s % 3600 / 60)}M${s % 60}S`;
+const tickerOf = (items) => `<div class="ticker" aria-hidden="true"><div class="ticker-in">${Array(2).fill(`<span>${items.map((t) => `${esc(t)}<i>/</i>`).join('')}</span>`).join('')}</div></div>`;
+const playIcon = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4l13 8-13 8z" fill="currentColor"/></svg>';
+
+function playerBlock(e) {
+  return `<div class="player" data-player data-reveal>
+<button class="play" type="button" aria-label="Abspielen">
+<svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4l13 8-13 8z" fill="currentColor"/></svg>
+<svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h4v16H6zM14 4h4v16h-4z" fill="currentColor"/></svg>
+</button>
+<div class="track">
+<div class="now"><span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="now-t">#${esc(e.no)} ${esc(e.hook)}</span></div>
+<input class="bar" type="range" min="0" max="100" step="0.1" value="0" aria-label="Position in der Folge">
+<div class="times"><span data-cur>0:00</span><span data-dur>${clock(e.duration)}</span></div>
+</div>
+<button class="speed" type="button" aria-label="Wiedergabegeschwindigkeit">1×</button>
+</div>`;
+}
+
+function episodePage(e, i, eps) {
+  const L = config.links;
+  const site = `https://${config.domain}/`;
+  const newer = eps[i - 1], older = eps[i + 1];
+  const notes = cleanNotes(e.notes);
+  const desc = (e.subtitle || plain(e.notes) || `Folge #${e.no} von VIER KIPPEN ZWEI BIER.`).slice(0, 158);
+  const chs = e.chapters.filter((c) => !/^(4K2B\s*)?(intro|outro)\b/i.test(c.title));
+  const tick = chs.length >= 3 ? chs.map((c) => c.title) : (config.ticker || []);
+  const cover = e.coverFile ? `/${e.coverFile}` : '';
+  const data = [{
+    audio: e.audio, duration: e.duration, no: e.no, label: `#${e.no} ${e.hook}`, hook: e.hook,
+    cover, coverAlt: `Cover von Folge #${e.no}`, spotify: e.spotify || L.spotify,
+    chapters: e.chapters.map((c) => ({ start: c.start, t: clock(c.start), title: c.title })),
+  }];
+  const ld = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'PodcastEpisode', '@id': `${site}${slug(e)}#episode`, url: `${site}${slug(e)}`,
+        name: `#${e.no} ${e.hook}${e.things ? ` – ${e.things}` : ''}`, episodeNumber: Number(e.no) || undefined,
+        datePublished: e.date.toISOString().slice(0, 10), description: desc, timeRequired: isoDur(e.duration),
+        inLanguage: 'de-DE', ...(cover ? { image: `${site}${e.coverFile}` } : {}),
+        associatedMedia: { '@type': 'MediaObject', contentUrl: e.audio },
+        partOfSeries: { '@type': 'PodcastSeries', '@id': `${site}#podcast`, name: 'VIER KIPPEN ZWEI BIER', url: site },
+        author: (config.people || []).map((name) => ({ '@type': 'Person', name })),
+      },
+      {
+        '@type': 'BreadcrumbList', itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'VIER KIPPEN ZWEI BIER', item: site },
+          { '@type': 'ListItem', position: 2, name: 'Alle Folgen', item: `${site}folgen/` },
+          { '@type': 'ListItem', position: 3, name: `#${e.no} ${e.hook}`, item: `${site}${slug(e)}` },
+        ],
+      },
+    ],
+  };
+  const card = (x, dir) => x ? `<a class="pn-card pn-${dir}" href="/${slug(x)}" data-reveal${dir === 'next' ? ' style="--d:1"' : ''}>
+<span class="pn-dir">${dir === 'prev' ? '← Vorherige Folge' : 'Nächste Folge →'}</span>
+<span class="pn-no" aria-hidden="true">#${esc(x.no)}</span>
+<span class="pn-h">${esc(x.hook)}</span>
+</a>` : `<span class="pn-card pn-empty pn-${dir}"><span class="pn-dir">${dir === 'next' ? 'Nächste Folge' : ''}</span><span class="pn-h">${dir === 'next' ? 'Kommt Donnerstag.' : ''}</span></span>`;
+
+  return layout({
+    title: `#${e.no} ${e.hook}${e.things ? ` – ${e.things}` : ''} | VIER KIPPEN ZWEI BIER`,
+    description: desc,
+    path: slug(e),
+    ogImage: cover ? e.coverFile : '',
+    stage: `<section class="eh-hero"><div class="wrap eh-grid">
+<div class="eh-text">
+<nav class="crumbs" aria-label="Brotkrumen"><a href="/folgen/">Alle Folgen</a><span aria-hidden="true">/</span><span>#${esc(e.no)}</span></nav>
+<p class="kicker">Folge #${esc(e.no)} · ${date(e.date)} · ${mins(e.duration)}</p>
+<span class="eh-no" aria-hidden="true">#${esc(e.no)}</span>
+<h1 class="eh-h">${esc(e.hook)}</h1>
+${e.things ? `<p class="eh-things">${esc(e.things)}</p>` : ''}
+<div class="eh-cta">
+<button class="eh-play" type="button" data-play="0"><span class="eh-play-i">${playIcon}</span><span>Jetzt reinhören</span></button>
+<a class="pill pill-light" href="${esc(e.spotify || L.spotify)}">Spotify</a>
+<a class="pill pill-light" href="${esc(L.apple)}">Apple Podcasts</a>
+</div>
+</div>
+${cover ? `<div class="cover-wrap eh-cover"><img class="cover" src="${cover}" alt="Cover von Folge #${esc(e.no)}" width="600" height="600" fetchpriority="high"></div>` : ''}
+</div></section>`,
+    body: `<main>
+${tick.length ? tickerOf(tick) : ''}
+<section id="folge" class="nf ep-play"><div class="wrap">
+${playerBlock(e)}
+${e.chapters.length ? `<details class="acc ch-acc" open data-chapters-wrap>
+<summary><h2 class="ch-h">Kapitel <span data-ch-count>${e.chapters.length}</span></h2><span class="acc-i" aria-hidden="true"></span></summary>
+<ol class="chapters" data-chapters>
+${e.chapters.map((c) => `<li><button type="button" data-seek="${c.start}"><span class="t">${clock(c.start)}</span><span class="ct">${esc(c.title)}</span></button></li>`).join('\n')}
+</ol>
+</details>` : ''}
+${notes ? `<div class="notes-grid">
+<h2 class="giant giant-side" data-reveal>Worum's <br>geht</h2>
+<div class="notes" data-reveal>${notes}</div>
+</div>` : ''}
+</div></section>
+<nav class="pn dark" aria-label="Weitere Folgen"><div class="wrap">
+<div class="pn-grid">${card(older, 'prev')}${card(newer, 'next')}</div>
+<p class="pn-all" data-reveal><a class="pill pill-light" href="/folgen/">Alle ${eps.length} Folgen <span aria-hidden="true">→</span></a></p>
+</div></nav>
+<script type="application/ld+json">${JSON.stringify(ld).replace(/</g, '\\u003c')}</script>
+</main>
+<script type="application/json" id="episodes-data">${JSON.stringify(data).replace(/</g, '\\u003c')}</script>
+<script src="/player.js?v=${V.js}" defer></script>`,
+  });
+}
+
+function archivePage(eps) {
+  const total = Math.round(eps.reduce((s, e) => s + e.duration, 0) / 60);
+  const first = eps[eps.length - 1];
+  return layout({
+    title: `Alle Folgen | VIER KIPPEN ZWEI BIER`,
+    description: `Alle ${eps.length} Folgen von VIER KIPPEN ZWEI BIER: Till und Fritz über Rap, Clubkultur und Fußball, aufgenommen in der Venus Bar Karlsruhe.`,
+    path: 'folgen/',
+    stage: `<section class="eh-hero arc-hero"><div class="wrap">
+<p class="kicker">Archiv · seit ${first.date.toLocaleDateString('de-DE', { month: 'long', year: 'numeric', timeZone: 'Europe/Berlin' })}</p>
+<h1 class="giant arc-h">Alle Folgen</h1>
+<p class="arc-sub"><b>${eps.length}</b> Folgen <i>/</i> <b>${total.toLocaleString('de-DE')}</b> Minuten <i>/</i> jeden Donnerstag eine neue</p>
+</div></section>`,
+    body: `<main>
+<section class="tl arc"><div class="wrap">
+<div class="tl-head" aria-hidden="true"><span>#</span><span>Folge</span><span>Datum</span><span>Länge</span><span></span></div>
+<ul class="episodes" data-reveal>
+${eps.map((e, i) => `<li style="--d:${Math.min(i, 12)}">
+<span class="no">#${esc(e.no)}</span>
+${e.coverFile ? `<img class="th" src="/${esc(e.coverFile)}" alt="" width="56" height="56" loading="lazy">` : '<span class="th"></span>'}
+<div class="txt"><a class="eh eh-link" href="/${slug(e)}">${esc(e.hook)}</a>${e.things ? `<div class="et">${esc(e.things)}</div>` : ''}</div>
+<span class="dt"><span class="no-m">#${esc(e.no)} · </span>${i === 0 ? '<span class="new">Neu</span> ' : ''}${date(e.date)}</span>
+<span class="ln">${mins(e.duration)}</span>
+<span class="go go-arrow" aria-hidden="true"><span>Zur Folge</span>→</span>
+</li>`).join('\n')}
+</ul>
+</div></section>
+</main>`,
+  });
+}
+
 // ---------- Bauen ----------
 const xml = await loadFeed();
 const eps = parse(xml);
@@ -382,7 +547,7 @@ for (const [name, src] of Object.entries(fonts)) {
 const showCover = attr(xml.split(/<item[\s>]/)[0], 'itunes:image', 'href');
 await mkdir(`${OUT}/covers`, { recursive: true });
 const fetched = new Map();
-for (const e of eps.slice(0, config.episodesOnStart + 1)) {
+for (const e of eps) {
   const url = e.image || showCover;
   if (process.env.COVER_FILE) {
     e.coverFile = 'covers/test.jpg';
@@ -402,6 +567,13 @@ for (const e of eps.slice(0, config.episodesOnStart + 1)) {
 }
 
 await writeFile(`${OUT}/index.html`, home(eps));
+for (const [i, e] of eps.entries()) {
+  if (!e.no) continue;
+  await mkdir(`${OUT}/${slug(e)}`, { recursive: true });
+  await writeFile(`${OUT}/${slug(e)}index.html`, episodePage(e, i, eps));
+}
+await mkdir(`${OUT}/folgen`, { recursive: true });
+await writeFile(`${OUT}/folgen/index.html`, archivePage(eps));
 for (const p of ['impressum', 'datenschutz']) {
   const src = await readFile(`pages/${p}.html`, 'utf8');
   const title = src.match(/<h1>(.*?)<\/h1>/)?.[1] || p;
@@ -414,6 +586,8 @@ await writeFile(`${OUT}/CNAME`, `${config.domain}\n`);
 const day = (d) => d.toISOString().slice(0, 10);
 const pages = [
   { loc: '', lastmod: day(eps[0].date) },
+  { loc: 'folgen/', lastmod: day(eps[0].date) },
+  ...eps.filter((e) => e.no).map((e) => ({ loc: slug(e), lastmod: day(e.date) })),
   { loc: 'impressum/', lastmod: day(new Date()) },
   { loc: 'datenschutz/', lastmod: day(new Date()) },
 ];
